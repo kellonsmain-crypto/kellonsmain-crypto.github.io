@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,11 +7,19 @@
 
     <title>Software Bros</title>
 
-    <meta name="description"
-        content="Software Bros — trusted software, utilities, game mods and community tools.">
-    <meta name="theme-color" content="#0b0d12">
+    <meta
+        name="description"
+        content="Software Bros — trusted software, utilities, game mods and community tools."
+    >
+
+    <meta name="theme-color" content="#080a0f">
 
     <style>
+
+        /* =========================
+           GLOBAL
+        ========================= */
+
         * {
             margin: 0;
             padding: 0;
@@ -22,10 +31,13 @@
             --panel: #10131a;
             --panel-2: #141820;
             --border: rgba(255,255,255,0.08);
+
             --text: #f5f7fb;
             --muted: #9299a8;
+
             --accent: #6c63ff;
             --accent-2: #8f88ff;
+
             --green: #35d07f;
             --yellow: #f5c451;
             --red: #ff6262;
@@ -54,6 +66,7 @@
                 var(--bg);
 
             color: var(--text);
+
             min-height: 100vh;
         }
 
@@ -66,6 +79,7 @@
         input {
             font: inherit;
         }
+
 
         /* =========================
            NAVIGATION
@@ -85,7 +99,9 @@
             padding: 0 6%;
 
             background: rgba(8, 10, 15, 0.75);
+
             backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
 
             border-bottom: 1px solid var(--border);
         }
@@ -93,10 +109,12 @@
         .logo {
             display: flex;
             align-items: center;
+
             gap: 10px;
 
             font-size: 20px;
             font-weight: 800;
+
             letter-spacing: -0.5px;
         }
 
@@ -118,6 +136,9 @@
 
             box-shadow:
                 0 0 25px rgba(108, 99, 255, 0.35);
+
+            font-size: 12px;
+            font-weight: 900;
         }
 
         .nav-links {
@@ -127,7 +148,9 @@
 
         .nav-links a {
             color: var(--muted);
+
             font-size: 14px;
+
             transition: 0.2s;
         }
 
@@ -135,12 +158,14 @@
             color: white;
         }
 
+
         /* =========================
            HERO
         ========================= */
 
         .hero {
             max-width: 1100px;
+
             margin: auto;
 
             padding: 100px 25px 70px;
@@ -151,14 +176,19 @@
         .eyebrow {
             display: inline-flex;
             align-items: center;
+
             gap: 8px;
 
             padding: 7px 13px;
 
-            border: 1px solid rgba(108,99,255,0.3);
+            border:
+                1px solid
+                rgba(108,99,255,0.3);
+
             border-radius: 999px;
 
-            background: rgba(108,99,255,0.08);
+            background:
+                rgba(108,99,255,0.08);
 
             color: #bcb8ff;
 
@@ -169,20 +199,29 @@
         .status-dot {
             width: 7px;
             height: 7px;
+
             border-radius: 50%;
+
             background: var(--green);
 
-            box-shadow: 0 0 12px var(--green);
+            box-shadow:
+                0 0 12px var(--green);
         }
 
         .hero h1 {
             margin-top: 25px;
 
-            font-size: clamp(48px, 8vw, 86px);
+            font-size:
+                clamp(
+                    48px,
+                    8vw,
+                    86px
+                );
 
             line-height: 0.95;
 
             letter-spacing: -5px;
+
             font-weight: 900;
 
             background:
@@ -192,19 +231,28 @@
                     #9c96ff 75%
                 );
 
+            /* Standard property */
+            background-clip: text;
+
+            /* Browser compatibility */
             -webkit-background-clip: text;
+
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
             max-width: 650px;
-            margin: 25px auto 35px;
+
+            margin:
+                25px auto 35px;
 
             color: var(--muted);
 
             font-size: 17px;
+
             line-height: 1.7;
         }
+
 
         /* =========================
            SEARCH
@@ -212,6 +260,7 @@
 
         .search-wrapper {
             max-width: 650px;
+
             margin: auto;
 
             position: relative;
@@ -220,13 +269,20 @@
         .search {
             width: 100%;
 
-            padding: 17px 20px 17px 50px;
+            padding:
+                17px
+                20px
+                17px
+                50px;
 
             border-radius: 14px;
 
-            border: 1px solid var(--border);
+            border:
+                1px solid
+                var(--border);
 
-            background: rgba(255,255,255,0.045);
+            background:
+                rgba(255,255,255,0.045);
 
             color: white;
 
@@ -235,22 +291,33 @@
             transition: 0.25s;
         }
 
+        .search::placeholder {
+            color: #6f7685;
+        }
+
         .search:focus {
-            border-color: rgba(108,99,255,0.7);
+            border-color:
+                rgba(108,99,255,0.7);
 
             box-shadow:
-                0 0 0 4px rgba(108,99,255,0.08);
+                0 0 0 4px
+                rgba(108,99,255,0.08);
         }
 
         .search-icon {
             position: absolute;
+
             left: 18px;
             top: 50%;
 
-            transform: translateY(-50%);
+            transform:
+                translateY(-50%);
 
             color: var(--muted);
+
+            font-size: 22px;
         }
+
 
         /* =========================
            CATEGORIES
@@ -258,20 +325,26 @@
 
         .categories {
             display: flex;
+
             justify-content: center;
+
             flex-wrap: wrap;
 
             gap: 10px;
 
-            margin: 30px 0 60px;
+            margin:
+                30px 0 60px;
         }
 
         .category {
-            padding: 9px 16px;
+            padding:
+                9px 16px;
 
             border-radius: 999px;
 
-            border: 1px solid var(--border);
+            border:
+                1px solid
+                var(--border);
 
             background: var(--panel);
 
@@ -284,38 +357,53 @@
 
         .category:hover,
         .category.active {
-            background: rgba(108,99,255,0.15);
-            border-color: rgba(108,99,255,0.4);
+            background:
+                rgba(108,99,255,0.15);
+
+            border-color:
+                rgba(108,99,255,0.4);
 
             color: white;
         }
+
 
         /* =========================
            MAIN
         ========================= */
 
         .container {
-            width: min(1200px, 92%);
+            width:
+                min(
+                    1200px,
+                    92%
+                );
+
             margin: auto;
         }
 
         .section-header {
             display: flex;
+
             align-items: end;
-            justify-content: space-between;
+
+            justify-content:
+                space-between;
 
             margin-bottom: 22px;
         }
 
         .section-header h2 {
             font-size: 27px;
+
             letter-spacing: -1px;
         }
 
         .section-header span {
             color: var(--muted);
+
             font-size: 13px;
         }
+
 
         /* =========================
            SOFTWARE GRID
@@ -327,12 +415,15 @@
             grid-template-columns:
                 repeat(
                     auto-fit,
-                    minmax(280px, 1fr)
+                    minmax(
+                        280px,
+                        1fr
+                    )
                 );
 
             gap: 18px;
 
-            padding-bottom: 100px;
+            padding-bottom: 70px;
         }
 
         .software-card {
@@ -342,7 +433,9 @@
 
             border-radius: 18px;
 
-            border: 1px solid var(--border);
+            border:
+                1px solid
+                var(--border);
 
             background:
                 linear-gradient(
@@ -370,69 +463,133 @@
             right: -80px;
             top: -80px;
 
-            background: var(--accent);
+            background:
+                var(--accent);
 
             opacity: 0.07;
 
             filter: blur(30px);
 
             border-radius: 50%;
+
+            pointer-events: none;
         }
 
         .software-card:hover {
-            transform: translateY(-5px);
+            transform:
+                translateY(-5px);
 
             border-color:
                 rgba(108,99,255,0.35);
 
             box-shadow:
-                0 15px 50px rgba(0,0,0,0.25);
+                0 15px 50px
+                rgba(0,0,0,0.25);
         }
 
         .card-top {
             display: flex;
+
             align-items: center;
-            justify-content: space-between;
+
+            justify-content:
+                space-between;
 
             margin-bottom: 20px;
         }
 
+
+        /* =========================
+           SOFTWARE ICON
+        ========================= */
+
         .software-icon {
-            width: 52px;
-            height: 52px;
+            width: 58px;
+            height: 58px;
 
             display: grid;
+
             place-items: center;
 
-            border-radius: 14px;
+            border-radius: 15px;
 
-            background: var(--panel-2);
+            background:
+                var(--panel-2);
 
-            border: 1px solid var(--border);
+            border:
+                1px solid
+                var(--border);
 
-            font-size: 24px;
+            overflow: hidden;
+
+            flex-shrink: 0;
         }
+
+        .software-icon img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+
+            padding: 7px;
+
+            display: block;
+        }
+
+        .fallback-icon {
+            font-size: 18px;
+
+            font-weight: 900;
+
+            color: white;
+
+            letter-spacing: -1px;
+        }
+
+
+        /* =========================
+           VERIFIED BADGE
+        ========================= */
 
         .verified {
             display: flex;
+
             align-items: center;
+
             gap: 5px;
 
-            padding: 5px 9px;
+            padding:
+                5px 9px;
 
             border-radius: 999px;
 
             background:
                 rgba(53,208,127,0.1);
 
-            color: var(--green);
+            color:
+                var(--green);
 
             font-size: 11px;
+
             font-weight: 700;
         }
 
+        .review-source {
+            color:
+                var(--yellow);
+
+            background:
+                rgba(245,196,81,0.08);
+        }
+
+
+        /* =========================
+           CARD CONTENT
+        ========================= */
+
         .software-card h3 {
             font-size: 19px;
+
             margin-bottom: 8px;
         }
 
@@ -442,28 +599,39 @@
             color: var(--muted);
 
             font-size: 13px;
+
             line-height: 1.6;
         }
 
         .meta {
             display: flex;
+
             gap: 8px;
+
             flex-wrap: wrap;
 
-            margin: 18px 0;
+            margin:
+                18px 0;
         }
 
         .tag {
-            padding: 5px 9px;
+            padding:
+                5px 9px;
 
             border-radius: 6px;
 
-            background: rgba(255,255,255,0.05);
+            background:
+                rgba(255,255,255,0.05);
 
             color: #aeb4c2;
 
             font-size: 11px;
         }
+
+
+        /* =========================
+           DOWNLOAD BUTTON
+        ========================= */
 
         .download {
             width: 100%;
@@ -493,21 +661,119 @@
         .download:hover {
             filter: brightness(1.12);
 
-            transform: translateY(-1px);
+            transform:
+                translateY(-1px);
         }
 
+
         /* =========================
-           SAFETY SECTION
+           LOGO DOWNLOAD
+        ========================= */
+
+        .logo-download {
+            display: flex;
+
+            align-items: center;
+
+            gap: 30px;
+
+            max-width: 850px;
+
+            margin:
+                0 auto 70px;
+
+            padding: 25px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(108,99,255,0.08),
+                    rgba(255,255,255,0.02)
+                );
+        }
+
+        .logo-preview {
+            width: 130px;
+            height: 130px;
+
+            border-radius: 25px;
+
+            background: #080a0f;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,0.35);
+        }
+
+        .logo-download h3 {
+            margin-bottom: 8px;
+
+            font-size: 20px;
+        }
+
+        .logo-download p {
+            color: var(--muted);
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            margin-bottom: 15px;
+        }
+
+        .logo-download-button {
+            display: inline-block;
+
+            padding:
+                11px 18px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--accent),
+                    #806aff
+                );
+
+            color: white;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            transition: 0.2s;
+        }
+
+        .logo-download-button:hover {
+            transform:
+                translateY(-2px);
+
+            filter:
+                brightness(1.12);
+        }
+
+
+        /* =========================
+           SAFETY
         ========================= */
 
         .safety {
-            margin-bottom: 100px;
+            margin-bottom: 70px;
 
             padding: 35px;
 
             border-radius: 20px;
 
-            border: 1px solid rgba(53,208,127,0.15);
+            border:
+                1px solid
+                rgba(53,208,127,0.15);
 
             background:
                 linear-gradient(
@@ -527,6 +793,7 @@
             color: var(--muted);
 
             line-height: 1.7;
+
             font-size: 14px;
         }
 
@@ -536,7 +803,10 @@
             grid-template-columns:
                 repeat(
                     auto-fit,
-                    minmax(180px, 1fr)
+                    minmax(
+                        180px,
+                        1fr
+                    )
                 );
 
             gap: 15px;
@@ -549,15 +819,19 @@
 
             border-radius: 12px;
 
-            background: rgba(0,0,0,0.15);
+            background:
+                rgba(0,0,0,0.15);
 
-            border: 1px solid var(--border);
+            border:
+                1px solid
+                var(--border);
 
             font-size: 13px;
         }
 
         .safety-item strong {
             display: block;
+
             margin-bottom: 5px;
         }
 
@@ -565,24 +839,31 @@
             color: var(--muted);
         }
 
+
         /* =========================
            FOOTER
         ========================= */
 
         footer {
-            border-top: 1px solid var(--border);
+            border-top:
+                1px solid
+                var(--border);
 
-            padding: 35px 6%;
+            padding:
+                35px 6%;
 
             display: flex;
 
-            justify-content: space-between;
+            justify-content:
+                space-between;
+
             align-items: center;
 
             color: var(--muted);
 
             font-size: 12px;
         }
+
 
         /* =========================
            MOBILE
@@ -591,7 +872,8 @@
         @media (max-width: 650px) {
 
             nav {
-                padding: 0 20px;
+                padding:
+                    0 20px;
             }
 
             .nav-links {
@@ -612,6 +894,7 @@
 
             .section-header span {
                 display: block;
+
                 margin-top: 5px;
             }
 
@@ -619,15 +902,26 @@
                 padding: 25px;
             }
 
+            .logo-download {
+                flex-direction: column;
+
+                text-align: center;
+            }
+
             footer {
                 flex-direction: column;
+
                 gap: 10px;
             }
+
         }
+
     </style>
 </head>
 
+
 <body>
+
 
     <!-- =========================
          NAVIGATION
@@ -636,14 +930,30 @@
     <nav>
 
         <a href="#" class="logo">
-            <span class="logo-mark">SB</span>
+
+            <span class="logo-mark">
+                SB
+            </span>
+
             Software Bros
+
         </a>
 
+
         <div class="nav-links">
-            <a href="#software">Software</a>
-            <a href="#safety">Safety</a>
-            <a href="#about">About</a>
+
+            <a href="#software">
+                Software
+            </a>
+
+            <a href="#safety">
+                Safety
+            </a>
+
+            <a href="#about">
+                About
+            </a>
+
         </div>
 
     </nav>
@@ -656,11 +966,18 @@
     <section class="hero">
 
         <div class="eyebrow">
+
             <span class="status-dot"></span>
+
             Community software hub
+
         </div>
 
-        <h1>Software Bros</h1>
+
+        <h1>
+            Software Bros
+        </h1>
+
 
         <p>
             A clean, simple place to discover useful software,
@@ -668,15 +985,20 @@
             digging through sketchy download sites.
         </p>
 
+
         <div class="search-wrapper">
 
-            <span class="search-icon">⌕</span>
+            <span class="search-icon">
+                ⌕
+            </span>
+
 
             <input
                 id="search"
                 class="search"
                 type="text"
                 placeholder="Search software, mods, utilities..."
+                autocomplete="off"
             >
 
         </div>
@@ -685,35 +1007,54 @@
 
 
     <!-- =========================
-         CATEGORIES
+         MAIN CONTAINER
     ========================== -->
 
     <div class="container">
 
+
+        <!-- =========================
+             CATEGORIES
+        ========================== -->
+
         <div class="categories">
 
-            <button class="category active"
-                data-category="all">
+            <button
+                class="category active"
+                data-category="all"
+            >
                 All
             </button>
 
-            <button class="category"
-                data-category="utilities">
+
+            <button
+                class="category"
+                data-category="utilities"
+            >
                 Utilities
             </button>
 
-            <button class="category"
-                data-category="mods">
+
+            <button
+                class="category"
+                data-category="mods"
+            >
                 Game Mods
             </button>
 
-            <button class="category"
-                data-category="gaming">
+
+            <button
+                class="category"
+                data-category="gaming"
+            >
                 Gaming
             </button>
 
-            <button class="category"
-                data-category="development">
+
+            <button
+                class="category"
+                data-category="development"
+            >
                 Development
             </button>
 
@@ -728,7 +1069,10 @@
 
             <div class="section-header">
 
-                <h2>Featured Software</h2>
+                <h2>
+                    Featured Software
+                </h2>
+
 
                 <span id="resultCount">
                     0 downloads
@@ -736,9 +1080,50 @@
 
             </div>
 
+
             <div
                 id="softwareGrid"
-                class="software-grid">
+                class="software-grid"
+            >
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             LOGO DOWNLOAD
+        ========================== -->
+
+        <section class="logo-download">
+
+            <img
+                src="assets/software-bros-logo.svg"
+                alt="Software Bros Logo"
+                class="logo-preview"
+            >
+
+
+            <div>
+
+                <h3>
+                    Software Bros Logo
+                </h3>
+
+
+                <p>
+                    Download the official Software Bros logo
+                    for Discord, social media, or other uses.
+                </p>
+
+
+                <a
+                    href="assets/software-bros-logo.svg"
+                    download="Software-Bros-Logo.svg"
+                    class="logo-download-button"
+                >
+                    ↓ Download Logo
+                </a>
+
             </div>
 
         </section>
@@ -748,9 +1133,15 @@
              SAFETY
         ========================== -->
 
-        <section id="safety" class="safety">
+        <section
+            id="safety"
+            class="safety"
+        >
 
-            <h2>Built around trust.</h2>
+            <h2>
+                Built around trust.
+            </h2>
+
 
             <p>
                 Software Bros is designed to make finding software
@@ -760,35 +1151,60 @@
                 files as official releases.
             </p>
 
+
             <div class="safety-grid">
 
+
                 <div class="safety-item">
-                    <strong>✓ Source Verified</strong>
+
+                    <strong>
+                        ✓ Source Verified
+                    </strong>
+
                     <span>
                         Download source is clearly identified.
                     </span>
+
                 </div>
 
+
                 <div class="safety-item">
-                    <strong>✓ Version Listed</strong>
+
+                    <strong>
+                        ✓ Version Listed
+                    </strong>
+
                     <span>
                         Users can see exactly what they're getting.
                     </span>
+
                 </div>
 
+
                 <div class="safety-item">
-                    <strong>✓ No Fake Buttons</strong>
+
+                    <strong>
+                        ✓ No Fake Buttons
+                    </strong>
+
                     <span>
                         No misleading advertisements disguised
                         as downloads.
                     </span>
+
                 </div>
 
+
                 <div class="safety-item">
-                    <strong>✓ Transparent</strong>
+
+                    <strong>
+                        ✓ Transparent
+                    </strong>
+
                     <span>
                         Third-party software is labeled as such.
                     </span>
+
                 </div>
 
             </div>
@@ -800,9 +1216,15 @@
              ABOUT
         ========================== -->
 
-        <section id="about" class="safety">
+        <section
+            id="about"
+            class="safety"
+        >
 
-            <h2>About Software Bros</h2>
+            <h2>
+                About Software Bros
+            </h2>
+
 
             <p>
                 Software Bros is a community-focused software directory
@@ -825,6 +1247,7 @@
             © 2026 Software Bros
         </span>
 
+
         <span>
             Built for the community.
         </span>
@@ -839,245 +1262,374 @@
     <script>
 
         /*
-        ==========================================
+        ==================================================
         SOFTWARE DATABASE
 
-        Add new software here.
+        THIS IS THE MAIN SECTION YOU WILL EDIT.
+
+        To add software, copy one of the objects below.
+
+        icon:
+        Put the URL to your software's image here.
 
         category options:
         utilities
         mods
         gaming
         development
-        ==========================================
+
+        url:
+        Put the download URL here.
+        ==================================================
         */
+
 
         const software = [
 
+
+            /* =========================
+               XENOS
+            ========================= */
+
             {
                 name: "Xenos Injector",
-                icon: "https://cdn.discordapp.com/attachments/1540616999850344539/1540617009178480711/image.png?ex=6a8a9ae6&is=6a894966&hm=b49873a8100c01347fa3256351f38abb647513138149dc15d34033ea7a7bf9f2&",
+
+                icon:
+                    "https://cdn.discordapp.com/attachments/1540616999850344539/1540617009178480711/image.png?ex=6a8a9ae6&is=6a894966&hm=b49873a8100c01347fa3256351f38abb647513138149dc15d34033ea7a7bf9f2&",
+
                 category: "gaming",
+
                 description:
                     "Third-party Windows utility. Always obtain releases from the project's legitimate source and verify the file before running it.",
-                version: "Latest",
+
+                version: "2.3.2",
+
                 size: "External",
+
                 source: "Official Source",
+
                 verified: true,
-                url: "https://github.com/DarthTon/Xenos/releases/download/2.3.2/Xenos_2.3.2.7z"
+
+                url:
+                    "https://github.com/DarthTon/Xenos/releases/download/2.3.2/Xenos_2.3.2.7z"
             },
+
+
+            /* =========================
+               EXAMPLE MOD
+            ========================= */
 
             {
                 name: "Example Game Mod",
-                icon: "🎮",
+
+                icon:
+                    "https://placehold.co/256x256/10131a/ffffff?text=MOD",
+
                 category: "mods",
+
                 description:
                     "A harmless example game modification. Replace this entry with a mod you have verified and have permission to distribute.",
+
                 version: "1.0.0",
+
                 size: "12 MB",
+
                 source: "Software Bros",
+
                 verified: true,
+
                 url: "#"
             },
+
+
+            /* =========================
+               SYSTEM UTILITY
+            ========================= */
 
             {
                 name: "System Utility",
-                icon: "🛠️",
+
+                icon:
+                    "https://placehold.co/256x256/10131a/ffffff?text=UTIL",
+
                 category: "utilities",
+
                 description:
                     "Useful system utility for everyday PC maintenance and troubleshooting.",
+
                 version: "2.4.1",
+
                 size: "8 MB",
+
                 source: "Software Bros",
+
                 verified: true,
+
                 url: "#"
             },
+
+
+            /* =========================
+               DEVELOPER TOOLKIT
+            ========================= */
 
             {
                 name: "Developer Toolkit",
-                icon: "💻",
+
+                icon:
+                    "https://placehold.co/256x256/10131a/ffffff?text=DEV",
+
                 category: "development",
+
                 description:
                     "A collection of useful tools for developers and people building software.",
+
                 version: "1.8.0",
+
                 size: "24 MB",
+
                 source: "Official Source",
+
                 verified: true,
+
                 url: "#"
             },
 
+
+            /* =========================
+               FPS OPTIMIZATION
+            ========================= */
+
             {
                 name: "FPS Optimization Pack",
-                icon: "🚀",
+
+                icon:
+                    "https://placehold.co/256x256/10131a/ffffff?text=FPS",
+
                 category: "gaming",
+
                 description:
                     "Example gaming utility listing. Replace this with a legitimate optimization tool you have tested.",
+
                 version: "3.1.0",
+
                 size: "5 MB",
+
                 source: "Software Bros",
+
                 verified: true,
+
                 url: "#"
             }
 
         ];
 
 
-        /*
-        ==========================================
-        RENDER SOFTWARE
-        ==========================================
-        */
+        /* ==================================================
+           ELEMENTS
+        ================================================== */
 
         const grid =
-            document.getElementById("softwareGrid");
+            document.getElementById(
+                "softwareGrid"
+            );
+
 
         const search =
-            document.getElementById("search");
+            document.getElementById(
+                "search"
+            );
+
 
         const resultCount =
-            document.getElementById("resultCount");
+            document.getElementById(
+                "resultCount"
+            );
+
 
         let activeCategory = "all";
 
 
+        /* ==================================================
+           RENDER SOFTWARE
+        ================================================== */
+
         function renderSoftware() {
 
             const searchTerm =
-                search.value.toLowerCase().trim();
+                search.value
+                    .toLowerCase()
+                    .trim();
+
 
             const filtered =
-                software.filter(item => {
+                software.filter(
+                    item => {
 
-                    const categoryMatch =
-                        activeCategory === "all" ||
-                        item.category === activeCategory;
+                        const categoryMatch =
+                            activeCategory === "all" ||
+                            item.category ===
+                            activeCategory;
 
-                    const searchMatch =
-                        item.name
-                            .toLowerCase()
-                            .includes(searchTerm) ||
 
-                        item.description
-                            .toLowerCase()
-                            .includes(searchTerm);
+                        const searchMatch =
+                            item.name
+                                .toLowerCase()
+                                .includes(searchTerm) ||
 
-                    return categoryMatch && searchMatch;
+                            item.description
+                                .toLowerCase()
+                                .includes(searchTerm);
 
-                });
+
+                        return (
+                            categoryMatch &&
+                            searchMatch
+                        );
+
+                    }
+                );
 
 
             grid.innerHTML = "";
 
 
-            filtered.forEach(item => {
+            filtered.forEach(
+                item => {
 
-                const card =
-                    document.createElement("article");
+                    const card =
+                        document.createElement(
+                            "article"
+                        );
 
-                card.className =
-                    "software-card";
 
-                card.innerHTML = `
+                    card.className =
+                        "software-card";
 
-                    <div class="card-top">
 
-                        <div class="software-icon">
-                            ${item.icon}
+                    card.innerHTML = `
+
+                        <div class="card-top">
+
+
+                            <div class="software-icon">
+
+                                <img
+                                    src="${item.icon}"
+                                    alt="${item.name} icon"
+                                    loading="lazy"
+                                    onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'fallback-icon\\'>SB</span>';"
+                                >
+
+                            </div>
+
+
+                            ${
+                                item.verified
+
+                                ?
+
+                                `
+                                <div class="verified">
+                                    ✓ VERIFIED
+                                </div>
+                                `
+
+                                :
+
+                                `
+                                <div class="verified review-source">
+                                    ⚠ REVIEW SOURCE
+                                </div>
+                                `
+                            }
+
+
                         </div>
 
-                        ${
-                            item.verified
-                            ?
-                            `
-                            <div class="verified">
-                                ✓ VERIFIED
-                            </div>
-                            `
-                            :
-                            `
-                            <div class="verified"
-                                style="
-                                    color: var(--yellow);
-                                    background: rgba(245,196,81,.08);
-                                ">
-                                ⚠ REVIEW SOURCE
-                            </div>
-                            `
-                        }
 
-                    </div>
+                        <h3>
+                            ${item.name}
+                        </h3>
 
 
-                    <h3>
-                        ${item.name}
-                    </h3>
+                        <p class="description">
+                            ${item.description}
+                        </p>
 
 
-                    <p class="description">
-                        ${item.description}
-                    </p>
+                        <div class="meta">
+
+                            <span class="tag">
+                                ${item.category}
+                            </span>
 
 
-                    <div class="meta">
-
-                        <span class="tag">
-                            ${item.category}
-                        </span>
-
-                        <span class="tag">
-                            v${item.version}
-                        </span>
-
-                        <span class="tag">
-                            ${item.size}
-                        </span>
-
-                    </div>
+                            <span class="tag">
+                                v${item.version}
+                            </span>
 
 
-                    <button
-                        class="download"
-                        onclick="downloadSoftware('${item.url}')">
+                            <span class="tag">
+                                ${item.size}
+                            </span>
 
-                        ${item.source === "External"
-                            ? "Visit Source →"
-                            : "Download →"}
+                        </div>
 
-                    </button>
 
-                `;
+                        <button
+                            class="download"
+                            onclick="downloadSoftware('${item.url}')"
+                        >
 
-                grid.appendChild(card);
+                            ${
+                                item.source === "Official Source"
 
-            });
+                                ? "Download →"
+
+                                : "Download →"
+                            }
+
+                        </button>
+
+                    `;
+
+
+                    grid.appendChild(card);
+
+                }
+            );
 
 
             resultCount.textContent =
                 `${filtered.length} ${
                     filtered.length === 1
-                    ? "download"
-                    : "downloads"
+                        ? "download"
+                        : "downloads"
                 }`;
 
         }
 
 
-        /*
-        ==========================================
-        DOWNLOAD HANDLER
-        ==========================================
-        */
+        /* ==================================================
+           DOWNLOAD HANDLER
+        ================================================== */
 
         function downloadSoftware(url) {
 
-            if (!url || url === "#") {
+            if (
+                !url ||
+                url === "#"
+            ) {
 
                 alert(
                     "This download has not been configured yet."
                 );
 
                 return;
+
             }
+
 
             window.open(
                 url,
@@ -1088,44 +1640,56 @@
         }
 
 
-        /*
-        ==========================================
-        CATEGORY FILTERS
-        ==========================================
-        */
+        /* ==================================================
+           CATEGORY FILTERS
+        ================================================== */
 
         document
-            .querySelectorAll(".category")
-            .forEach(button => {
+            .querySelectorAll(
+                ".category"
+            )
+            .forEach(
+                button => {
 
-                button.addEventListener(
-                    "click",
-                    () => {
+                    button.addEventListener(
+                        "click",
+                        () => {
 
-                        document
-                            .querySelectorAll(".category")
-                            .forEach(btn =>
-                                btn.classList.remove("active")
+
+                            document
+                                .querySelectorAll(
+                                    ".category"
+                                )
+                                .forEach(
+                                    btn =>
+                                        btn.classList
+                                            .remove(
+                                                "active"
+                                            )
+                                );
+
+
+                            button.classList.add(
+                                "active"
                             );
 
-                        button.classList.add("active");
 
-                        activeCategory =
-                            button.dataset.category;
-
-                        renderSoftware();
-
-                    }
-                );
-
-            });
+                            activeCategory =
+                                button.dataset.category;
 
 
-        /*
-        ==========================================
-        SEARCH
-        ==========================================
-        */
+                            renderSoftware();
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* ==================================================
+           SEARCH
+        ================================================== */
 
         search.addEventListener(
             "input",
@@ -1133,10 +1697,9 @@
         );
 
 
-        /*
-        INITIAL RENDER
-        ==========================================
-        */
+        /* ==================================================
+           INITIAL RENDER
+        ================================================== */
 
         renderSoftware();
 
@@ -1144,3 +1707,4 @@
 
 </body>
 </html>
+```
