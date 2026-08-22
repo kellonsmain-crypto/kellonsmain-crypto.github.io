@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Software Bros</title>
+
+    <meta name="description"
+        content="Software Bros — trusted software, utilities, game mods and community tools.">
+    <meta name="theme-color" content="#0b0d12">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #080a0f;
+            --panel: #10131a;
+            --panel-2: #141820;
+            --border: rgba(255,255,255,0.08);
+            --text: #f5f7fb;
+            --muted: #9299a8;
+            --accent: #6c63ff;
+            --accent-2: #8f88ff;
+            --green: #35d07f;
+            --yellow: #f5c451;
+            --red: #ff6262;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 50% -20%,
+                    rgba(108, 99, 255, 0.20),
+                    transparent 40%
+                ),
+                var(--bg);
+
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+
+            height: 70px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 6%;
+
+            background: rgba(8, 10, 15, 0.75);
+            backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-mark {
+            width: 34px;
+            height: 34px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--accent),
+                    #9b65ff
+                );
+
+            box-shadow:
+                0 0 25px rgba(108, 99, 255, 0.35);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            max-width: 1100px;
+            margin: auto;
+
+            padding: 100px 25px 70px;
+
+            text-align: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 7px 13px;
+
+            border: 1px solid rgba(108,99,255,0.3);
+            border-radius: 999px;
+
+            background: rgba(108,99,255,0.08);
+
+            color: #bcb8ff;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+
+            box-shadow: 0 0 12px var(--green);
+        }
+
+        .hero h1 {
+            margin-top: 25px;
+
+            font-size: clamp(48px, 8vw, 86px);
+
+            line-height: 0.95;
+
+            letter-spacing: -5px;
+            font-weight: 900;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff 25%,
+                    #9c96ff 75%
+                );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: 25px auto 35px;
+
+            color: var(--muted);
+
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           SEARCH
+        ========================= */
+
+        .search-wrapper {
+            max-width: 650px;
+            margin: auto;
+
+            position: relative;
+        }
+
+        .search {
+            width: 100%;
+
+            padding: 17px 20px 17px 50px;
+
+            border-radius: 14px;
+
+            border: 1px solid var(--border);
+
+            background: rgba(255,255,255,0.045);
+
+            color: white;
+
+            outline: none;
+
+            transition: 0.25s;
+        }
+
+        .search:focus {
+            border-color: rgba(108,99,255,0.7);
+
+            box-shadow:
+                0 0 0 4px rgba(108,99,255,0.08);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: var(--muted);
+        }
+
+        /* =========================
+           CATEGORIES
+        ========================= */
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            margin: 30px 0 60px;
+        }
+
+        .category {
+            padding: 9px 16px;
+
+            border-radius: 999px;
+
+            border: 1px solid var(--border);
+
+            background: var(--panel);
+
+            color: var(--muted);
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .category:hover,
+        .category.active {
+            background: rgba(108,99,255,0.15);
+            border-color: rgba(108,99,255,0.4);
+
+            color: white;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            width: min(1200px, 92%);
+            margin: auto;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+
+            margin-bottom: 22px;
+        }
+
+        .section-header h2 {
+            font-size: 27px;
+            letter-spacing: -1px;
+        }
+
+        .section-header span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* =========================
+           SOFTWARE GRID
+        ========================= */
+
+        .software-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(280px, 1fr)
+                );
+
+            gap: 18px;
+
+            padding-bottom: 100px;
+        }
+
+        .software-card {
+            position: relative;
+
+            padding: 22px;
+
+            border-radius: 18px;
+
+            border: 1px solid var(--border);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.045),
+                    rgba(255,255,255,0.015)
+                );
+
+            transition:
+                transform 0.25s,
+                border-color 0.25s,
+                box-shadow 0.25s;
+
+            overflow: hidden;
+        }
+
+        .software-card::before {
+            content: "";
+
+            position: absolute;
+
+            width: 150px;
+            height: 150px;
+
+            right: -80px;
+            top: -80px;
+
+            background: var(--accent);
+
+            opacity: 0.07;
+
+            filter: blur(30px);
+
+            border-radius: 50%;
+        }
+
+        .software-card:hover {
+            transform: translateY(-5px);
+
+            border-color:
+                rgba(108,99,255,0.35);
+
+            box-shadow:
+                0 15px 50px rgba(0,0,0,0.25);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+        .software-icon {
+            width: 52px;
+            height: 52px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 14px;
+
+            background: var(--panel-2);
+
+            border: 1px solid var(--border);
+
+            font-size: 24px;
+        }
+
+        .verified {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            padding: 5px 9px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(53,208,127,0.1);
+
+            color: var(--green);
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .software-card h3 {
+            font-size: 19px;
+            margin-bottom: 8px;
+        }
+
+        .description {
+            min-height: 48px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+
+            margin: 18px 0;
+        }
+
+        .tag {
+            padding: 5px 9px;
+
+            border-radius: 6px;
+
+            background: rgba(255,255,255,0.05);
+
+            color: #aeb4c2;
+
+            font-size: 11px;
+        }
+
+        .download {
+            width: 100%;
+
+            padding: 12px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--accent),
+                    #806aff
+                );
+
+            color: white;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .download:hover {
+            filter: brightness(1.12);
+
+            transform: translateY(-1px);
+        }
+
+        /* =========================
+           SAFETY SECTION
+        ========================= */
+
+        .safety {
+            margin-bottom: 100px;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            border: 1px solid rgba(53,208,127,0.15);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(53,208,127,0.06),
+                    rgba(255,255,255,0.02)
+                );
+        }
+
+        .safety h2 {
+            margin-bottom: 12px;
+        }
+
+        .safety p {
+            max-width: 750px;
+
+            color: var(--muted);
+
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .safety-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(180px, 1fr)
+                );
+
+            gap: 15px;
+
+            margin-top: 25px;
+        }
+
+        .safety-item {
+            padding: 15px;
+
+            border-radius: 12px;
+
+            background: rgba(0,0,0,0.15);
+
+            border: 1px solid var(--border);
+
+            font-size: 13px;
+        }
+
+        .safety-item strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .safety-item span {
+            color: var(--muted);
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            border-top: 1px solid var(--border);
+
+            padding: 35px 6%;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 650px) {
+
+            nav {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 75px;
+            }
+
+            .hero h1 {
+                letter-spacing: -3px;
+            }
+
+            .section-header {
+                display: block;
+            }
+
+            .section-header span {
+                display: block;
+                margin-top: 5px;
+            }
+
+            .safety {
+                padding: 25px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVIGATION
+    ========================== -->
+
+    <nav>
+
+        <a href="#" class="logo">
+            <span class="logo-mark">SB</span>
+            Software Bros
+        </a>
+
+        <div class="nav-links">
+            <a href="#software">Software</a>
+            <a href="#safety">Safety</a>
+            <a href="#about">About</a>
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="eyebrow">
+            <span class="status-dot"></span>
+            Community software hub
+        </div>
+
+        <h1>Software Bros</h1>
+
+        <p>
+            A clean, simple place to discover useful software,
+            game mods, utilities and community tools without
+            digging through sketchy download sites.
+        </p>
+
+        <div class="search-wrapper">
+
+            <span class="search-icon">⌕</span>
+
+            <input
+                id="search"
+                class="search"
+                type="text"
+                placeholder="Search software, mods, utilities..."
+            >
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         CATEGORIES
+    ========================== -->
+
+    <div class="container">
+
+        <div class="categories">
+
+            <button class="category active"
+                data-category="all">
+                All
+            </button>
+
+            <button class="category"
+                data-category="utilities">
+                Utilities
+            </button>
+
+            <button class="category"
+                data-category="mods">
+                Game Mods
+            </button>
+
+            <button class="category"
+                data-category="gaming">
+                Gaming
+            </button>
+
+            <button class="category"
+                data-category="development">
+                Development
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             SOFTWARE
+        ========================== -->
+
+        <section id="software">
+
+            <div class="section-header">
+
+                <h2>Featured Software</h2>
+
+                <span id="resultCount">
+                    0 downloads
+                </span>
+
+            </div>
+
+            <div
+                id="softwareGrid"
+                class="software-grid">
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SAFETY
+        ========================== -->
+
+        <section id="safety" class="safety">
+
+            <h2>Built around trust.</h2>
+
+            <p>
+                Software Bros is designed to make finding software
+                easier while being transparent about where downloads
+                come from. Every listing should identify its source,
+                version and download type. Never disguise third-party
+                files as official releases.
+            </p>
+
+            <div class="safety-grid">
+
+                <div class="safety-item">
+                    <strong>✓ Source Verified</strong>
+                    <span>
+                        Download source is clearly identified.
+                    </span>
+                </div>
+
+                <div class="safety-item">
+                    <strong>✓ Version Listed</strong>
+                    <span>
+                        Users can see exactly what they're getting.
+                    </span>
+                </div>
+
+                <div class="safety-item">
+                    <strong>✓ No Fake Buttons</strong>
+                    <span>
+                        No misleading advertisements disguised
+                        as downloads.
+                    </span>
+                </div>
+
+                <div class="safety-item">
+                    <strong>✓ Transparent</strong>
+                    <span>
+                        Third-party software is labeled as such.
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ABOUT
+        ========================== -->
+
+        <section id="about" class="safety">
+
+            <h2>About Software Bros</h2>
+
+            <p>
+                Software Bros is a community-focused software directory
+                built to make useful programs, utilities and game
+                modifications easier to find.
+            </p>
+
+        </section>
+
+    </div>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <span>
+            © 2026 Software Bros
+        </span>
+
+        <span>
+            Built for the community.
+        </span>
+
+    </footer>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        /*
+        ==========================================
+        SOFTWARE DATABASE
+
+        Add new software here.
+
+        category options:
+        utilities
+        mods
+        gaming
+        development
+        ==========================================
+        */
+
+        const software = [
+
+            {
+                name: "Xenos64",
+                icon: "⚙️",
+                category: "gaming",
+                description:
+                    "Third-party Windows utility. Always obtain releases from the project's legitimate source and verify the file before running it.",
+                version: "Latest",
+                size: "External",
+                source: "Official Source",
+                verified: false,
+                url: "#"
+            },
+
+            {
+                name: "Example Game Mod",
+                icon: "🎮",
+                category: "mods",
+                description:
+                    "A harmless example game modification. Replace this entry with a mod you have verified and have permission to distribute.",
+                version: "1.0.0",
+                size: "12 MB",
+                source: "Software Bros",
+                verified: true,
+                url: "#"
+            },
+
+            {
+                name: "System Utility",
+                icon: "🛠️",
+                category: "utilities",
+                description:
+                    "Useful system utility for everyday PC maintenance and troubleshooting.",
+                version: "2.4.1",
+                size: "8 MB",
+                source: "Software Bros",
+                verified: true,
+                url: "#"
+            },
+
+            {
+                name: "Developer Toolkit",
+                icon: "💻",
+                category: "development",
+                description:
+                    "A collection of useful tools for developers and people building software.",
+                version: "1.8.0",
+                size: "24 MB",
+                source: "Official Source",
+                verified: true,
+                url: "#"
+            },
+
+            {
+                name: "FPS Optimization Pack",
+                icon: "🚀",
+                category: "gaming",
+                description:
+                    "Example gaming utility listing. Replace this with a legitimate optimization tool you have tested.",
+                version: "3.1.0",
+                size: "5 MB",
+                source: "Software Bros",
+                verified: true,
+                url: "#"
+            }
+
+        ];
+
+
+        /*
+        ==========================================
+        RENDER SOFTWARE
+        ==========================================
+        */
+
+        const grid =
+            document.getElementById("softwareGrid");
+
+        const search =
+            document.getElementById("search");
+
+        const resultCount =
+            document.getElementById("resultCount");
+
+        let activeCategory = "all";
+
+
+        function renderSoftware() {
+
+            const searchTerm =
+                search.value.toLowerCase().trim();
+
+            const filtered =
+                software.filter(item => {
+
+                    const categoryMatch =
+                        activeCategory === "all" ||
+                        item.category === activeCategory;
+
+                    const searchMatch =
+                        item.name
+                            .toLowerCase()
+                            .includes(searchTerm) ||
+
+                        item.description
+                            .toLowerCase()
+                            .includes(searchTerm);
+
+                    return categoryMatch && searchMatch;
+
+                });
+
+
+            grid.innerHTML = "";
+
+
+            filtered.forEach(item => {
+
+                const card =
+                    document.createElement("article");
+
+                card.className =
+                    "software-card";
+
+                card.innerHTML = `
+
+                    <div class="card-top">
+
+                        <div class="software-icon">
+                            ${item.icon}
+                        </div>
+
+                        ${
+                            item.verified
+                            ?
+                            `
+                            <div class="verified">
+                                ✓ VERIFIED
+                            </div>
+                            `
+                            :
+                            `
+                            <div class="verified"
+                                style="
+                                    color: var(--yellow);
+                                    background: rgba(245,196,81,.08);
+                                ">
+                                ⚠ REVIEW SOURCE
+                            </div>
+                            `
+                        }
+
+                    </div>
+
+
+                    <h3>
+                        ${item.name}
+                    </h3>
+
+
+                    <p class="description">
+                        ${item.description}
+                    </p>
+
+
+                    <div class="meta">
+
+                        <span class="tag">
+                            ${item.category}
+                        </span>
+
+                        <span class="tag">
+                            v${item.version}
+                        </span>
+
+                        <span class="tag">
+                            ${item.size}
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        class="download"
+                        onclick="downloadSoftware('${item.url}')">
+
+                        ${item.source === "External"
+                            ? "Visit Source →"
+                            : "Download →"}
+
+                    </button>
+
+                `;
+
+                grid.appendChild(card);
+
+            });
+
+
+            resultCount.textContent =
+                `${filtered.length} ${
+                    filtered.length === 1
+                    ? "download"
+                    : "downloads"
+                }`;
+
+        }
+
+
+        /*
+        ==========================================
+        DOWNLOAD HANDLER
+        ==========================================
+        */
+
+        function downloadSoftware(url) {
+
+            if (!url || url === "#") {
+
+                alert(
+                    "This download has not been configured yet."
+                );
+
+                return;
+            }
+
+            window.open(
+                url,
+                "_blank",
+                "noopener,noreferrer"
+            );
+
+        }
+
+
+        /*
+        ==========================================
+        CATEGORY FILTERS
+        ==========================================
+        */
+
+        document
+            .querySelectorAll(".category")
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        document
+                            .querySelectorAll(".category")
+                            .forEach(btn =>
+                                btn.classList.remove("active")
+                            );
+
+                        button.classList.add("active");
+
+                        activeCategory =
+                            button.dataset.category;
+
+                        renderSoftware();
+
+                    }
+                );
+
+            });
+
+
+        /*
+        ==========================================
+        SEARCH
+        ==========================================
+        */
+
+        search.addEventListener(
+            "input",
+            renderSoftware
+        );
+
+
+        /*
+        INITIAL RENDER
+        ==========================================
+        */
+
+        renderSoftware();
+
+    </script>
+
+</body>
+</html>
