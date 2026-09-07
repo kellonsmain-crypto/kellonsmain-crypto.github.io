@@ -3,749 +3,415 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="theme-color" content="#050505">
-
-<title>AfterDark — Video Feed</title>
+<title>ScrollFeed</title>
 
 <style>
 
-/* =========================================================
-   RESET
-========================================================= */
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html,
-body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #050505;
-    color: #fff;
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-}
-
-button {
-    font: inherit;
-    color: inherit;
-}
-
-
-/* =========================================================
-   APP
-========================================================= */
-
-#app {
-    width: 100%;
-    height: 100%;
-    background: #050505;
-}
-
-
-/* =========================================================
-   AGE GATE
-========================================================= */
-
-.age-gate {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 24px;
-
-    background:
-        radial-gradient(
-            circle at top,
-            #35152d 0%,
-            #120912 45%,
-            #050505 100%
-        );
-}
-
-.age-card {
-    width: min(450px, 100%);
-
-    padding: 38px 30px;
-
-    text-align: center;
-
-    background: rgba(18,18,18,.96);
-
-    border:
-        1px solid
-        rgba(255,255,255,.12);
-
-    border-radius: 25px;
-
-    box-shadow:
-        0 25px 80px
-        rgba(0,0,0,.7);
-}
-
-.age-icon {
-    font-size: 54px;
-    margin-bottom: 15px;
-}
-
-.age-card h1 {
-    font-size: 29px;
-    margin-bottom: 12px;
-}
-
-.age-card p {
-    color: #aaa;
-    line-height: 1.55;
-    margin-bottom: 24px;
-}
-
-.age-card button {
-    width: 100%;
-
-    padding: 15px;
-
-    border-radius: 13px;
-
-    cursor: pointer;
-
-    font-weight: 700;
-}
-
-.enter-button {
-    border: 0;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff286f,
-            #9138ff
-        );
-}
-
-.exit-button {
-    margin-top: 10px;
-
-    border:
-        1px solid
-        #333;
-
-    background: #171717;
-}
-
-.age-note {
-    margin-top: 16px;
-
-    font-size: 11px;
-
-    color: #666;
-
-    line-height: 1.4;
-}
-
-
-/* =========================================================
-   FEED
-========================================================= */
-
-.feed {
-    width: 100%;
-    height: 100%;
-
-    overflow-y: auto;
-
-    scroll-snap-type: y mandatory;
-
-    scrollbar-width: none;
-}
-
-.feed::-webkit-scrollbar {
-    display: none;
-}
-
-
-/* =========================================================
-   VIDEO CARD
-========================================================= */
-
-.video-card {
-    position: relative;
-
-    width: 100%;
-    height: 100dvh;
-
-    min-height: 600px;
-
-    overflow: hidden;
-
-    background: #090909;
-
-    scroll-snap-align: start;
-}
-
-.video-card video {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    background: #111;
-}
-
-
-/* Dark readability gradient */
-
-.video-card::after {
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    background:
-        linear-gradient(
-            to top,
-            rgba(0,0,0,.90) 0%,
-            rgba(0,0,0,.35) 28%,
-            transparent 62%,
-            rgba(0,0,0,.35) 100%
-        );
-}
-
-
-/* =========================================================
-   TOP BAR
-========================================================= */
-
-.topbar {
-    position: fixed;
-
-    top: 0;
-    left: 0;
-    right: 0;
-
-    z-index: 100;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 16px 18px;
-
-    pointer-events: none;
-}
-
-.topbar > * {
-    pointer-events: auto;
-}
-
-.logo {
-    font-size: 21px;
-    font-weight: 900;
-}
-
-.logo span {
-    color: #ff286f;
-}
-
-.top-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.top-button {
-    border:
-        1px solid
-        rgba(255,255,255,.15);
-
-    background:
-        rgba(0,0,0,.45);
-
-    backdrop-filter: blur(10px);
-
-    padding: 8px 12px;
-
-    border-radius: 999px;
-
-    cursor: pointer;
-}
-
-
-/* =========================================================
-   VIDEO INFO
-========================================================= */
-
-.video-info {
-    position: absolute;
-
-    z-index: 20;
-
-    left: 18px;
-    right: 90px;
-    bottom: 28px;
-}
-
-.creator {
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    margin-bottom: 10px;
-}
-
-.avatar {
-    width: 40px;
-    height: 40px;
-
-    display: grid;
-
-    place-items: center;
-
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff286f,
-            #8438ec
-        );
-
-    font-weight: 900;
-}
-
-.creator-name {
-    font-weight: 700;
-}
-
-.follow-button {
-    margin-left: 5px;
-
-    padding: 4px 8px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.3);
-
-    background:
-        rgba(0,0,0,.3);
-
-    border-radius: 7px;
-
-    font-size: 11px;
-
-    cursor: pointer;
-}
-
-.caption {
-    font-size: 15px;
-
-    line-height: 1.45;
-
-    margin-bottom: 8px;
-}
-
-.meta {
-    color: #bbb;
-
-    font-size: 12px;
-}
-
-.reddit-source {
-    margin-top: 7px;
-
-    font-size: 11px;
-
-    color: #888;
-}
-
-.reddit-source a {
-    color: #aaa;
-}
-
-
-/* =========================================================
-   ACTIONS
-========================================================= */
-
-.actions {
-    position: absolute;
-
-    right: 13px;
-    bottom: 27px;
-
-    z-index: 30;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    gap: 17px;
-}
-
-.action {
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    gap: 4px;
-}
-
-.action button {
-    width: 48px;
-    height: 48px;
-
-    border: 0;
-
-    border-radius: 50%;
-
-    background:
-        rgba(20,20,20,.60);
-
-    backdrop-filter: blur(8px);
-
-    cursor: pointer;
-
-    font-size: 21px;
-
-    transition: .15s;
-}
-
-.action button:active {
-    transform: scale(.84);
-}
-
-.action button.liked {
-    color: #ff286f;
-
-    background:
-        rgba(255,40,111,.15);
-}
-
-.action span {
-    font-size: 11px;
-}
-
-
-/* =========================================================
-   LOADING
-========================================================= */
-
-.loading {
-    position: absolute;
-
-    inset: 0;
-
-    z-index: 50;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    flex-direction: column;
-
-    gap: 12px;
-
-    background: #050505;
-}
-
-.spinner {
-    width: 38px;
-    height: 38px;
-
-    border:
-        3px solid
-        #333;
-
-    border-top-color:
-        #ff286f;
-
-    border-radius: 50%;
-
-    animation:
-        spin .8s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-
-/* =========================================================
-   EMPTY / ERROR
-========================================================= */
-
-.message {
-    position: absolute;
-
-    inset: 0;
-
-    z-index: 50;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-align: center;
-
-    padding: 30px;
-
-    background: #050505;
-}
-
-.message-box {
-    max-width: 450px;
-}
-
-.message-box h2 {
-    margin-bottom: 10px;
-}
-
-.message-box p {
-    color: #999;
-
-    line-height: 1.5;
-
-    margin-bottom: 18px;
-}
-
-.retry {
-    padding: 12px 20px;
-
-    border: 0;
-
-    border-radius: 10px;
-
-    background: #ff286f;
-
-    cursor: pointer;
-}
-
-
-/* =========================================================
-   SETTINGS PANEL
-========================================================= */
-
-.panel {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 500;
-
-    display: none;
-
-    align-items: flex-end;
-
-    background:
-        rgba(0,0,0,.72);
-
-    backdrop-filter: blur(8px);
-}
-
-.panel.open {
-    display: flex;
-}
-
-.panel-card {
-    width: 100%;
-
-    max-height: 80%;
-
-    overflow-y: auto;
-
-    padding: 25px;
-
-    background: #111;
-
-    border-radius:
-        25px 25px 0 0;
-}
-
-.panel-card h2 {
-    margin-bottom: 7px;
-}
-
-.panel-card p {
-    color: #999;
-
-    line-height: 1.45;
-
-    margin-bottom: 20px;
-}
-
-.setting {
-    padding: 15px;
-
-    margin-bottom: 10px;
-
-    border:
-        1px solid
-        #292929;
-
-    border-radius: 13px;
-
-    background: #181818;
-}
-
-.setting strong {
-    display: block;
-
-    margin-bottom: 5px;
-}
-
-.setting small {
-    color: #888;
-}
-
-.preference-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 10px;
-
-    margin-top: 12px;
-}
-
-.preference {
-    padding: 14px;
-
-    border:
-        1px solid
-        #333;
-
-    border-radius: 12px;
-
-    background: #181818;
-
-    cursor: pointer;
-}
-
-.preference.selected {
-    border-color: #ff286f;
-
-    background:
-        rgba(255,40,111,.12);
-}
-
-.close-panel {
-    width: 100%;
-
-    margin-top: 15px;
-
-    padding: 14px;
-
-    border: 0;
-
-    border-radius: 12px;
-
-    background: #292929;
-
-    cursor: pointer;
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-.toast {
-    position: fixed;
-
-    z-index: 1000;
-
-    left: 50%;
-    bottom: 25px;
-
-    transform:
-        translateX(-50%)
-        translateY(25px);
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    padding: 12px 18px;
-
-    border-radius: 999px;
-
-    background:
-        rgba(25,25,25,.95);
-
-    border:
-        1px solid
-        #333;
-
-    font-size: 13px;
-
-    transition: .2s;
-}
-
-.toast.show {
-    opacity: 1;
-
-    transform:
-        translateX(-50%)
-        translateY(0);
-}
-
-
-/* =========================================================
-   DESKTOP
-========================================================= */
-
-@media (min-width: 700px) {
-
-    .video-card video {
-        width: min(500px, 100%);
-
-        margin: auto;
+    /* =========================================================
+       EASY EDIT SETTINGS
+       ========================================================= */
+
+    :root {
+        --background: #000;
+        --text: #fff;
+        --accent: #ff0050;
+        --secondary: #00f2ea;
     }
 
-    .video-info {
-        left:
-            calc(
-                50% - 250px + 18px
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--background);
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+
+    /* =========================================================
+       APP
+       ========================================================= */
+
+    #app {
+        width: 100%;
+        height: 100dvh;
+        background: #000;
+        position: relative;
+    }
+
+
+    /* =========================================================
+       FEED
+       ========================================================= */
+
+    #feed {
+        width: 100%;
+        height: 100dvh;
+
+        overflow-y: auto;
+
+        scroll-snap-type: y mandatory;
+
+        scrollbar-width: none;
+    }
+
+    #feed::-webkit-scrollbar {
+        display: none;
+    }
+
+
+    /* =========================================================
+       VIDEO
+       ========================================================= */
+
+    .video-card {
+        width: 100%;
+        height: 100dvh;
+
+        position: relative;
+
+        scroll-snap-align: start;
+
+        background: #111;
+
+        overflow: hidden;
+    }
+
+    .video {
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+
+        background: #111;
+
+        cursor: pointer;
+    }
+
+
+    /* =========================================================
+       DARK GRADIENT
+       ========================================================= */
+
+    .video-card::after {
+        content: "";
+
+        position: absolute;
+
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        height: 50%;
+
+        pointer-events: none;
+
+        background:
+            linear-gradient(
+                transparent,
+                rgba(0,0,0,.85)
             );
     }
+
+
+    /* =========================================================
+       TOP BAR
+       ========================================================= */
+
+    .topbar {
+        position: fixed;
+
+        z-index: 100;
+
+        top: 0;
+        left: 0;
+        right: 0;
+
+        height: 70px;
+
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+
+        pointer-events: none;
+
+        background:
+            linear-gradient(
+                rgba(0,0,0,.55),
+                transparent
+            );
+    }
+
+    .logo {
+        font-size: 25px;
+
+        font-weight: 900;
+
+        letter-spacing: -1px;
+
+        text-shadow:
+            2px 2px var(--accent),
+            -2px -2px var(--secondary);
+    }
+
+
+    /* =========================================================
+       VIDEO INFORMATION
+       ========================================================= */
+
+    .info {
+        position: absolute;
+
+        z-index: 20;
+
+        left: 18px;
+        right: 90px;
+        bottom: 30px;
+    }
+
+    .username {
+        font-weight: 800;
+
+        font-size: 17px;
+
+        margin-bottom: 8px;
+    }
+
+    .description {
+        font-size: 15px;
+
+        line-height: 1.4;
+
+        margin-bottom: 10px;
+    }
+
+    .source {
+        font-size: 12px;
+
+        color: #bbb;
+    }
+
+
+    /* =========================================================
+       ACTION BUTTONS
+       ========================================================= */
 
     .actions {
-        right:
-            calc(
-                50% - 250px + 10px
-            );
+        position: absolute;
+
+        z-index: 30;
+
+        right: 12px;
+        bottom: 30px;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        gap: 18px;
     }
-}
+
+    button {
+        font-family: inherit;
+    }
+
+    .action {
+        border: 0;
+
+        background: transparent;
+
+        color: white;
+
+        cursor: pointer;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        font-size: 12px;
+
+        font-weight: bold;
+    }
+
+    .action-icon {
+        width: 50px;
+        height: 50px;
+
+        display: grid;
+
+        place-items: center;
+
+        border-radius: 50%;
+
+        background: rgba(255,255,255,.13);
+
+        backdrop-filter: blur(10px);
+
+        font-size: 22px;
+
+        margin-bottom: 4px;
+    }
+
+    .liked .action-icon {
+        color: var(--accent);
+    }
+
+
+    /* =========================================================
+       PLAY ICON
+       ========================================================= */
+
+    .play {
+        position: absolute;
+
+        z-index: 15;
+
+        inset: 0;
+
+        display: grid;
+
+        place-items: center;
+
+        pointer-events: none;
+
+        opacity: 0;
+
+        transition: opacity .2s;
+    }
+
+    .play.show {
+        opacity: 1;
+    }
+
+    .play span {
+        width: 75px;
+        height: 75px;
+
+        border-radius: 50%;
+
+        display: grid;
+
+        place-items: center;
+
+        background: rgba(0,0,0,.6);
+
+        font-size: 32px;
+    }
+
+
+    /* =========================================================
+       LOADING
+       ========================================================= */
+
+    #loading {
+        position: fixed;
+
+        z-index: 500;
+
+        inset: 0;
+
+        background: #000;
+
+        display: grid;
+
+        place-items: center;
+    }
+
+    #loading.hidden {
+        display: none;
+    }
+
+    .spinner {
+        width: 45px;
+        height: 45px;
+
+        border: 4px solid #333;
+
+        border-top-color: var(--accent);
+
+        border-radius: 50%;
+
+        animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+
+    /* =========================================================
+       LOAD MORE
+       ========================================================= */
+
+    #loadingMore {
+        position: fixed;
+
+        z-index: 400;
+
+        bottom: 20px;
+
+        left: 50%;
+
+        transform: translateX(-50%);
+
+        background: rgba(0,0,0,.65);
+
+        padding: 8px 14px;
+
+        border-radius: 20px;
+
+        font-size: 12px;
+
+        display: none;
+    }
+
+
+    /* =========================================================
+       DESKTOP
+       ========================================================= */
+
+    @media (min-width: 700px) {
+
+        #feed {
+            width: 500px;
+
+            margin: auto;
+
+            box-shadow:
+                0 0 80px rgba(0,0,0,.8);
+        }
+
+        .topbar {
+            width: 500px;
+
+            left: 50%;
+
+            right: auto;
+
+            transform: translateX(-50%);
+        }
+    }
 
 </style>
 </head>
@@ -753,377 +419,197 @@ button {
 
 <body>
 
+<div id="app">
 
-<!-- =======================================================
-     EASY CONFIGURATION
-     
-     MOST IMPORTANT SETTINGS ARE HERE.
-======================================================== -->
+    <div id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <header class="topbar">
+        <div class="logo">
+            ScrollFeed
+        </div>
+    </header>
+
+    <main id="feed"></main>
+
+    <div id="loadingMore">
+        Loading more videos...
+    </div>
+
+</div>
+
 
 <script>
 
-const APP_CONFIG = {
+/* ============================================================
+   SCROLLFEED CONFIGURATION
+   ============================================================ */
+
+const CONFIG = {
 
     /*
-    ---------------------------------------------------------
-    CONTENT SAFETY
-    ---------------------------------------------------------
+       What Wikimedia Commons searches for.
 
-    Keep this false for the normal Reddit feed.
+       You can change these to things like:
 
-    The backend should independently enforce this value.
-    ---------------------------------------------------------
+       "cats"
+       "dogs"
+       "sports"
+       "nature"
+       "cars"
+       "space"
+       "ocean"
+       "funny"
+       "animation"
+
+       The application randomly chooses one.
     */
 
-    NSFW_ENABLED: false,
-
-
-    /*
-    ---------------------------------------------------------
-    REDDIT SOURCES
-
-    Change these subreddit names.
-
-    Example:
-
-        "videos"
-        "nextfuckinglevel"
-
-    Do not include "r/".
-    ---------------------------------------------------------
-    */
-
-    SUBREDDITS: [
-
-        "butts",
-        "celebleaks",
-        "hotgirls"
-
+    SEARCHES: [
+        "doggystyle",
+        "porn",
+        "sex",
+        "fucking",
+        "girlsnude",
+        "nakedgirls",
+        "hotgirls",
+        "girlsass",
+        "girlsbutt"
     ],
 
 
     /*
-    ---------------------------------------------------------
-    REDDIT SORT
-
-    Allowed:
-
-        hot
-        new
-        rising
-        top
-    ---------------------------------------------------------
+       Number of videos fetched at once.
     */
 
-    SORT: "hot",
+    VIDEOS_PER_REQUEST: 20,
 
 
     /*
-    ---------------------------------------------------------
-    POSTS PER SUBREDDIT
-    ---------------------------------------------------------
+       Automatically load more when this many
+       videos remain.
     */
 
-    POSTS_PER_SUBREDDIT: 25,
+    LOAD_MORE_WHEN_REMAINING: 5,
 
 
     /*
-    ---------------------------------------------------------
-    VIDEO FILTER
-    ---------------------------------------------------------
-
-    true =
-        only show posts recognized as videos.
-
-    false =
-        allow other media too.
-    ---------------------------------------------------------
+       Videos start muted because browsers normally
+       block autoplay with sound.
     */
 
-    VIDEOS_ONLY: true,
+    MUTED: true,
 
 
     /*
-    ---------------------------------------------------------
-    REMOVE DELETED POSTS
-    ---------------------------------------------------------
+       Automatically play the visible video.
     */
 
-    EXCLUDE_REMOVED: true,
-
-
-    /*
-    ---------------------------------------------------------
-    RANDOMIZE FEED
-    ---------------------------------------------------------
-    */
-
-    RANDOMIZE: true,
-
-
-    /*
-    ---------------------------------------------------------
-    API ENDPOINT
-
-    Your server should expose:
-
-        GET /api/feed
-    ---------------------------------------------------------
-    */
-
-    API_ENDPOINT: "/api/feed",
-
-
-    /*
-    ---------------------------------------------------------
-    FEED SIZE
-    ---------------------------------------------------------
-    */
-
-    FEED_SIZE: 30,
-
-
-    /*
-    ---------------------------------------------------------
-    AUTOPLAY
-    ---------------------------------------------------------
-    */
-
-    AUTOPLAY: true,
-
-
-    /*
-    ---------------------------------------------------------
-    MUTE BY DEFAULT
-
-    Browsers generally block autoplay with sound.
-    ---------------------------------------------------------
-    */
-
-    MUTED_BY_DEFAULT: true,
-
-
-    /*
-    ---------------------------------------------------------
-    SHOW REDDIT ATTRIBUTION
-    ---------------------------------------------------------
-    */
-
-    SHOW_SOURCE: true,
-
-
-    /*
-    ---------------------------------------------------------
-    RECOMMENDATION SETTINGS
-    ---------------------------------------------------------
-    */
-
-    RECOMMENDATIONS: {
-
-        enabled: true,
-
-        /*
-        How strongly user likes influence ranking.
-        */
-
-        likeWeight: 5,
-
-        /*
-        How strongly watched categories influence ranking.
-        */
-
-        watchWeight: 1,
-
-        /*
-        How strongly popularity influences ranking.
-        */
-
-        popularityWeight: 0.35,
-
-        /*
-        Small discovery/randomness factor.
-        */
-
-        discoveryWeight: 15
-
-    }
+    AUTOPLAY: true
 
 };
 
 
-/*
-=========================================================
-DO NOT EDIT BELOW HERE UNLESS YOU ARE CHANGING CODE.
-=========================================================
-*/
-
-
-/* =======================================================
-   USER STATE
-======================================================= */
-
-const USER = {
-
-    preferences:
-        JSON.parse(
-            localStorage.getItem(
-                "afterdark_preferences"
-            ) || "[]"
-        ),
-
-    liked:
-        JSON.parse(
-            localStorage.getItem(
-                "afterdark_likes"
-            ) || "[]"
-        ),
-
-    watched:
-        JSON.parse(
-            localStorage.getItem(
-                "afterdark_watched"
-            ) || "[]"
-        ),
-
-    categoryScores:
-        JSON.parse(
-            localStorage.getItem(
-                "afterdark_category_scores"
-            ) ||
-            "{}"
-        )
-
-};
-
-
-/* =======================================================
-   RUNTIME STATE
-======================================================= */
-
-let FEED = [];
-
-let CURRENT_FEED = [];
-
-let toastTimer;
-
-
-/* =======================================================
+/* ============================================================
    DOM
-======================================================= */
+   ============================================================ */
 
-const feedElement =
-    document.getElementById("feed");
+const feed = document.getElementById("feed");
 
-const ageGate =
-    document.getElementById("ageGate");
+const loading = document.getElementById("loading");
+
+const loadingMore =
+    document.getElementById("loadingMore");
 
 
-/* =======================================================
-   AGE VERIFICATION
-======================================================= */
+/* ============================================================
+   STATE
+   ============================================================ */
 
-function enterSite() {
+let loadingVideos = false;
 
-    localStorage.setItem(
-        "afterdark_age_verified",
-        "true"
-    );
+let loadedFiles = new Set();
 
-    document
-        .getElementById("ageGate")
-        .style.display = "none";
+let observer;
 
-    loadFeed();
 
+/* ============================================================
+   RANDOM SEARCH
+   ============================================================ */
+
+function randomSearch() {
+
+    const list = CONFIG.SEARCHES;
+
+    return list[
+        Math.floor(
+            Math.random() * list.length
+        )
+    ];
 }
 
 
-function exitSite() {
+/* ============================================================
+   FETCH RANDOM VIDEOS FROM WIKIMEDIA COMMONS
+   ============================================================ */
 
-    window.location.href =
-        "https://www.google.com";
+async function fetchVideos() {
 
-}
+    if (loadingVideos) return;
 
+    loadingVideos = true;
 
-function checkAgeGate() {
+    loadingMore.style.display = "block";
 
-    if (
-        localStorage.getItem(
-            "afterdark_age_verified"
-        ) === "true"
-    ) {
-
-        ageGate.style.display = "none";
-
-        loadFeed();
-
-    }
-
-}
-
-
-/* =======================================================
-   LOAD REDDIT FEED
-======================================================= */
-
-async function loadFeed() {
-
-    showLoading();
 
     try {
 
+        const search = randomSearch();
+
+
         /*
-        ---------------------------------------------------
-        IMPORTANT:
+           Wikimedia Commons API.
 
-        Reddit credentials belong on your backend.
-
-        The frontend only requests normalized feed data:
-
-            GET /api/feed
-        ---------------------------------------------------
+           "origin=*" allows browser-side CORS requests.
         */
 
-        const params =
-            new URLSearchParams({
+        const url =
+            "https://commons.wikimedia.org/w/api.php" +
 
-                subreddits:
-                    APP_CONFIG.SUBREDDITS.join(","),
+            "?action=query" +
 
-                sort:
-                    APP_CONFIG.SORT,
+            "&generator=search" +
 
-                limit:
-                    String(
-                        APP_CONFIG.POSTS_PER_SUBREDDIT
-                    ),
+            "&gsrsearch=" +
+            encodeURIComponent(
+                search + " filetype:video"
+            ) +
 
-                videosOnly:
-                    String(
-                        APP_CONFIG.VIDEOS_ONLY
-                    ),
+            "&gsrnamespace=6" +
 
-                nsfw:
-                    String(
-                        APP_CONFIG.NSFW_ENABLED
-                    )
+            "&gsrlimit=" +
+            CONFIG.VIDEOS_PER_REQUEST +
 
-            });
+            "&prop=imageinfo" +
+
+            "&iiprop=url|mime|size" +
+
+            "&iiurlwidth=720" +
+
+            "&format=json" +
+
+            "&origin=*";
 
 
         const response =
-            await fetch(
-                APP_CONFIG.API_ENDPOINT +
-                "?" +
-                params.toString()
-            );
+            await fetch(url);
 
 
         if (!response.ok) {
 
             throw new Error(
-                `Feed request failed: ${response.status}`
+                "Wikimedia request failed"
             );
 
         }
@@ -1133,520 +619,244 @@ async function loadFeed() {
             await response.json();
 
 
-        /*
-        Expected backend response:
-
-            {
-                videos: [...]
-            }
-
-        or simply:
-
-            [...]
-        */
-
-        FEED =
-            Array.isArray(data)
-                ? data
-                : (data.videos || []);
-
-
-        /*
-        Client-side safety check.
-
-        Even if the backend accidentally returns
-        something marked NSFW, don't display it when
-        the setting is false.
-        */
-
-        if (!APP_CONFIG.NSFW_ENABLED) {
-
-            FEED =
-                FEED.filter(
-                    post =>
-                        post.nsfw !== true &&
-                        post.over18 !== true
-                );
-
-        }
-
-
-        /*
-        Video-only filter.
-        */
-
-        if (APP_CONFIG.VIDEOS_ONLY) {
-
-            FEED =
-                FEED.filter(
-                    post =>
-                        post.isVideo === true ||
-                        isVideoUrl(
-                            post.videoUrl ||
-                            post.url ||
-                            ""
-                        )
-                );
-
-        }
-
-
-        if (APP_CONFIG.EXCLUDE_REMOVED) {
-
-            FEED =
-                FEED.filter(
-                    post =>
-                        !post.removed &&
-                        !post.deleted
-                );
-
-        }
-
-
-        if (!FEED.length) {
-
-            showMessage(
-                "No videos found",
-                "Your current Reddit source settings did not return any compatible videos."
+        const pages =
+            Object.values(
+                data.query?.pages || {}
             );
 
-            return;
+
+        /*
+           Shuffle results so the feed doesn't
+           always appear in the same order.
+        */
+
+        shuffle(pages);
+
+
+        let added = 0;
+
+
+        for (const page of pages) {
+
+            const info =
+                page.imageinfo?.[0];
+
+
+            if (!info) continue;
+
+
+            const mime =
+                info.mime || "";
+
+
+            /*
+               Only allow actual video formats.
+
+               This is important because Wikimedia
+               search can return images as well.
+            */
+
+            if (!mime.startsWith("video/")) {
+                continue;
+            }
+
+
+            const videoURL =
+                info.url;
+
+
+            if (!videoURL) continue;
+
+
+            /*
+               Don't show the same file twice.
+            */
+
+            if (loadedFiles.has(videoURL)) {
+                continue;
+            }
+
+
+            loadedFiles.add(videoURL);
+
+
+            const card =
+                createVideoCard({
+
+                    url: videoURL,
+
+                    title:
+                        cleanTitle(
+                            page.title
+                        ),
+
+                    source:
+                        "Wikimedia Commons",
+
+                    pageURL:
+                        "https://commons.wikimedia.org/wiki/" +
+                        encodeURIComponent(
+                            page.title.replace(
+                                "File:",
+                                "File:"
+                            )
+                        )
+
+                });
+
+
+            feed.appendChild(card);
+
+
+            added++;
 
         }
 
 
-        CURRENT_FEED =
-            buildRecommendedFeed(FEED);
+        /*
+           If this particular search didn't
+           produce usable videos, try again.
+        */
 
+        if (added === 0) {
 
-        renderFeed();
+            console.log(
+                "No usable videos. Trying another search..."
+            );
 
-    }
+        }
 
-    catch (error) {
+    } catch (error) {
 
-        console.error(error);
-
-        showMessage(
-            "Couldn't load the feed",
-            "Make sure your backend is running and /api/feed is available.",
-            true
+        console.error(
+            "Could not load videos:",
+            error
         );
 
+        showError();
+
     }
+
+
+    loadingVideos = false;
+
+    loadingMore.style.display = "none";
 
 }
 
 
-/* =======================================================
-   RECOMMENDATION ALGORITHM
-======================================================= */
-
-function buildRecommendedFeed(posts) {
-
-    if (
-        !APP_CONFIG.RECOMMENDATIONS.enabled
-    ) {
-
-        return shuffle(
-            [...posts]
-        );
-
-    }
-
-
-    const scored =
-        posts.map(
-            post => ({
-
-                post,
-
-                score:
-                    recommendationScore(
-                        post
-                    )
-
-            })
-        );
-
-
-    scored.sort(
-        (a, b) =>
-            b.score - a.score
-    );
-
-
-    return scored.map(
-        item => item.post
-    );
-
-}
-
-
-function recommendationScore(post) {
-
-    let score = 0;
-
-
-    /*
-    Category preference.
-    */
-
-    const category =
-        post.category ||
-        "general";
-
-
-    if (
-        USER.preferences.includes(
-            category
-        )
-    ) {
-
-        score += 100;
-
-    }
-
-
-    /*
-    Historical category behavior.
-    */
-
-    score +=
-        (
-            USER.categoryScores[
-                category
-            ] || 0
-        )
-        *
-        APP_CONFIG.RECOMMENDATIONS
-            .watchWeight;
-
-
-    /*
-    Likes.
-    */
-
-    if (
-        USER.liked.includes(
-            post.id
-        )
-    ) {
-
-        score +=
-            APP_CONFIG.RECOMMENDATIONS
-                .likeWeight *
-            100;
-
-    }
-
-
-    /*
-    Popularity.
-
-    Use Reddit score as one signal, not
-    the entire recommendation system.
-    */
-
-    const redditScore =
-        Number(
-            post.score || 0
-        );
-
-    score +=
-        redditScore *
-        APP_CONFIG.RECOMMENDATIONS
-            .popularityWeight;
-
-
-    /*
-    Discovery.
-    */
-
-    score +=
-        Math.random() *
-        APP_CONFIG.RECOMMENDATIONS
-            .discoveryWeight;
-
-
-    /*
-    Avoid immediately repeating videos.
-    */
-
-    if (
-        USER.watched.includes(
-            post.id
-        )
-    ) {
-
-        score -= 25;
-
-    }
-
-
-    return score;
-
-}
-
-
-/* =======================================================
-   RENDER FEED
-======================================================= */
-
-function renderFeed() {
-
-    feedElement.innerHTML = "";
-
-
-    CURRENT_FEED
-        .slice(
-            0,
-            APP_CONFIG.FEED_SIZE
-        )
-        .forEach(
-            (post, index) => {
-
-                const card =
-                    createVideoCard(
-                        post,
-                        index
-                    );
-
-                feedElement.appendChild(
-                    card
-                );
-
-            }
-        );
-
-
-    setupVideoObserver();
-
-}
-
-
-/* =======================================================
+/* ============================================================
    CREATE VIDEO CARD
-======================================================= */
+   ============================================================ */
 
-function createVideoCard(
-    post,
-    index
-) {
+function createVideoCard(data) {
 
     const card =
-        document.createElement(
-            "article"
-        );
+        document.createElement("article");
+
 
     card.className =
         "video-card";
 
 
-    const liked =
-        USER.liked.includes(
-            post.id
-        );
-
-
-    const videoURL =
-        post.videoUrl ||
-        post.url ||
-        post.mediaUrl;
-
-
-    const author =
-        escapeHTML(
-            post.author ||
-            "Reddit creator"
-        );
-
-
-    const title =
-        escapeHTML(
-            post.title ||
-            "Untitled video"
-        );
-
-
-    const subreddit =
-        escapeHTML(
-            post.subreddit ||
-            ""
-        );
-
-
-    const category =
-        escapeHTML(
-            post.category ||
-            "general"
-        );
-
-
-    const redditURL =
-        post.redditUrl ||
-        post.permalink ||
-        "#";
-
-
     card.innerHTML = `
 
         <video
-            src="${escapeAttribute(videoURL)}"
-            loop
+            class="video"
+            src="${escapeHTML(data.url)}"
             playsinline
             preload="metadata"
-            ${APP_CONFIG.MUTED_BY_DEFAULT ? "muted" : ""}
+            ${CONFIG.MUTED ? "muted" : ""}
         ></video>
 
 
-        <div class="video-info">
+        <div class="play">
 
-            <div class="creator">
+            <span>▶</span>
 
-                <div class="avatar">
-                    ${author.charAt(0).toUpperCase()}
-                </div>
+        </div>
 
-                <span class="creator-name">
-                    @${author}
-                </span>
 
-                <button
-                    class="follow-button"
-                    onclick="showToast('Follow system coming next')"
-                >
-                    Follow
-                </button>
+        <div class="info">
 
+            <div class="username">
+                ScrollFeed
             </div>
 
-
-            <div class="caption">
-                ${title}
+            <div class="description">
+                ${escapeHTML(data.title)}
             </div>
 
-
-            <div class="meta">
-                r/${subreddit}
-                •
-                ${category}
-                •
-                ${formatNumber(
-                    Number(
-                        post.score || 0
-                    )
-                )}
-                Reddit score
+            <div class="source">
+                🎬 ${escapeHTML(data.source)}
             </div>
-
-
-            ${
-                APP_CONFIG.SHOW_SOURCE
-                ?
-                `
-                <div class="reddit-source">
-
-                    <a
-                        href="${escapeAttribute(redditURL)}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        View original Reddit post
-                    </a>
-
-                </div>
-                `
-                :
-                ""
-            }
 
         </div>
 
 
         <div class="actions">
 
+            <button
+                class="action like"
+                title="Like"
+            >
 
-            <!-- LIKE -->
+                <div class="action-icon">
+                    ♡
+                </div>
 
-            <div class="action">
+                <span>Like</span>
 
-                <button
-                    class="${liked ? "liked" : ""}"
-                    onclick="toggleLike('${escapeAttribute(post.id)}', this)"
-                >
-                    ${liked ? "❤️" : "♡"}
-                </button>
-
-                <span id="likes-${escapeAttribute(post.id)}">
-                    ${formatNumber(
-                        Number(
-                            post.ourLikes || 0
-                        )
-                    )}
-                </span>
-
-            </div>
+            </button>
 
 
-            <!-- COMMENTS -->
+            <button
+                class="action share"
+                title="Share"
+            >
 
-            <div class="action">
-
-                <button
-                    onclick="showToast('Comments coming next')"
-                >
-                    💬
-                </button>
-
-                <span>
-                    ${formatNumber(
-                        Number(
-                            post.numComments || 0
-                        )
-                    )}
-                </span>
-
-            </div>
-
-
-            <!-- SAVE -->
-
-            <div class="action">
-
-                <button
-                    onclick="saveVideo('${escapeAttribute(post.id)}')"
-                >
-                    🔖
-                </button>
-
-                <span>
-                    Save
-                </span>
-
-            </div>
-
-
-            <!-- SHARE -->
-
-            <div class="action">
-
-                <button
-                    onclick="shareVideo('${escapeAttribute(post.id)}')"
-                >
+                <div class="action-icon">
                     ↗
-                </button>
+                </div>
 
-                <span>
-                    Share
-                </span>
+                <span>Share</span>
 
-            </div>
+            </button>
 
+
+            <button
+                class="action mute"
+                title="Sound"
+            >
+
+                <div class="action-icon">
+                    🔇
+                </div>
+
+                <span>Sound</span>
+
+            </button>
+
+
+            <button
+                class="action source-button"
+                title="Open source"
+            >
+
+                <div class="action-icon">
+                    ℹ
+                </div>
+
+                <span>Source</span>
+
+            </button>
 
         </div>
 
     `;
+
+
+    setupCard(card, data);
 
 
     return card;
@@ -1654,44 +864,203 @@ function createVideoCard(
 }
 
 
-/* =======================================================
-   VIDEO OBSERVER
-======================================================= */
+/* ============================================================
+   VIDEO CONTROLS
+   ============================================================ */
 
-function setupVideoObserver() {
+function setupCard(card, data) {
 
-    const cards =
-        document.querySelectorAll(
-            ".video-card"
-        );
+    const video =
+        card.querySelector(".video");
 
 
-    const observer =
+    const play =
+        card.querySelector(".play");
+
+
+    const like =
+        card.querySelector(".like");
+
+
+    const share =
+        card.querySelector(".share");
+
+
+    const mute =
+        card.querySelector(".mute");
+
+
+    const source =
+        card.querySelector(".source-button");
+
+
+    /* ---------------------------------------------------------
+       PLAY / PAUSE
+       --------------------------------------------------------- */
+
+    video.addEventListener(
+        "click",
+        () => {
+
+            if (video.paused) {
+
+                video.play();
+
+                play.classList.remove("show");
+
+            } else {
+
+                video.pause();
+
+                play.classList.add("show");
+
+            }
+
+        }
+    );
+
+
+    /* ---------------------------------------------------------
+       LIKE
+       --------------------------------------------------------- */
+
+    like.addEventListener(
+        "click",
+        () => {
+
+            like.classList.toggle("liked");
+
+
+            like.querySelector(
+                ".action-icon"
+            ).textContent =
+                like.classList.contains("liked")
+                    ? "♥"
+                    : "♡";
+
+        }
+    );
+
+
+    /* ---------------------------------------------------------
+       MUTE
+       --------------------------------------------------------- */
+
+    mute.addEventListener(
+        "click",
+        () => {
+
+            video.muted =
+                !video.muted;
+
+
+            mute.querySelector(
+                ".action-icon"
+            ).textContent =
+                video.muted
+                    ? "🔇"
+                    : "🔊";
+
+        }
+    );
+
+
+    /* ---------------------------------------------------------
+       SHARE
+       --------------------------------------------------------- */
+
+    share.addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                if (navigator.share) {
+
+                    await navigator.share({
+
+                        title:
+                            "ScrollFeed",
+
+                        text:
+                            data.title,
+
+                        url:
+                            data.pageURL
+
+                    });
+
+                } else {
+
+                    await navigator.clipboard.writeText(
+                        data.pageURL
+                    );
+
+                    alert(
+                        "Source URL copied!"
+                    );
+
+                }
+
+            } catch {
+
+                console.log(
+                    "Share cancelled."
+                );
+
+            }
+
+        }
+    );
+
+
+    /* ---------------------------------------------------------
+       SOURCE
+       --------------------------------------------------------- */
+
+    source.addEventListener(
+        "click",
+        () => {
+
+            window.open(
+                data.pageURL,
+                "_blank",
+                "noopener"
+            );
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   AUTOPLAY OBSERVER
+   ============================================================ */
+
+function setupObserver() {
+
+    if (observer) {
+
+        observer.disconnect();
+
+    }
+
+
+    observer =
         new IntersectionObserver(
-
             entries => {
 
                 entries.forEach(
                     entry => {
 
                         const video =
-                            entry.target
-                                .querySelector(
-                                    "video"
-                                );
+                            entry.target.querySelector(
+                                ".video"
+                            );
 
 
-                        const index =
-                            [...cards]
-                                .indexOf(
-                                    entry.target
-                                );
-
-
-                        const post =
-                            CURRENT_FEED[
-                                index
-                            ];
+                        if (!video) return;
 
 
                         if (
@@ -1699,7 +1068,7 @@ function setupVideoObserver() {
                         ) {
 
                             if (
-                                APP_CONFIG.AUTOPLAY
+                                CONFIG.AUTOPLAY
                             ) {
 
                                 video
@@ -1710,18 +1079,7 @@ function setupVideoObserver() {
 
                             }
 
-
-                            if (post) {
-
-                                recordWatch(
-                                    post
-                                );
-
-                            }
-
-                        }
-
-                        else {
+                        } else {
 
                             video.pause();
 
@@ -1731,579 +1089,63 @@ function setupVideoObserver() {
                 );
 
             },
-
             {
-                threshold: .70
-            }
-
-        );
-
-
-    cards.forEach(
-        card =>
-            observer.observe(
-                card
-            )
-    );
-
-}
-
-
-/* =======================================================
-   WATCH TRACKING
-======================================================= */
-
-function recordWatch(post) {
-
-    if (
-        !USER.watched.includes(
-            post.id
-        )
-    ) {
-
-        USER.watched.push(
-            post.id
-        );
-
-
-        const category =
-            post.category ||
-            "general";
-
-
-        USER.categoryScores[
-            category
-        ] =
-            (
-                USER.categoryScores[
-                    category
-                ] || 0
-            ) + 1;
-
-
-        saveUser();
-
-    }
-
-}
-
-
-/* =======================================================
-   LIKE SYSTEM
-======================================================= */
-
-function toggleLike(
-    id,
-    button
-) {
-
-    const index =
-        USER.liked.indexOf(id);
-
-
-    const post =
-        FEED.find(
-            item =>
-                String(item.id) ===
-                String(id)
-        );
-
-
-    if (!post)
-        return;
-
-
-    if (index === -1) {
-
-        USER.liked.push(id);
-
-        button.classList.add(
-            "liked"
-        );
-
-        button.innerHTML =
-            "❤️";
-
-
-        /*
-        Local recommendation signal.
-        */
-
-        const category =
-            post.category ||
-            "general";
-
-
-        USER.categoryScores[
-            category
-        ] =
-            (
-                USER.categoryScores[
-                    category
-                ] || 0
-            ) +
-            APP_CONFIG.RECOMMENDATIONS
-                .likeWeight;
-
-
-        showToast(
-            "Liked ❤️"
-        );
-
-
-        /*
-        Send your own like to backend.
-
-        This is NOT a Reddit upvote.
-        */
-
-        sendLike(
-            id,
-            true
-        );
-
-    }
-
-    else {
-
-        USER.liked.splice(
-            index,
-            1
-        );
-
-
-        button.classList.remove(
-            "liked"
-        );
-
-        button.innerHTML =
-            "♡";
-
-
-        showToast(
-            "Like removed"
-        );
-
-
-        sendLike(
-            id,
-            false
-        );
-
-    }
-
-
-    saveUser();
-
-}
-
-
-/* =======================================================
-   SEND OUR LIKE TO BACKEND
-======================================================= */
-
-async function sendLike(
-    videoId,
-    liked
-) {
-
-    try {
-
-        await fetch(
-            "/api/like",
-            {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body:
-                    JSON.stringify({
-
-                        videoId,
-                        liked
-
-                    })
-
+                threshold: 0.7
             }
         );
 
-    }
 
-    catch (error) {
+    document
+        .querySelectorAll(".video-card")
+        .forEach(card => {
 
-        console.warn(
-            "Like could not be saved remotely:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =======================================================
-   SAVE VIDEO
-======================================================= */
-
-function saveVideo(id) {
-
-    const key =
-        "afterdark_saved";
-
-
-    let saved =
-        JSON.parse(
-            localStorage.getItem(
-                key
-            ) || "[]"
-        );
-
-
-    if (
-        !saved.includes(id)
-    ) {
-
-        saved.push(id);
-
-        showToast(
-            "Saved 🔖"
-        );
-
-    }
-
-    else {
-
-        saved =
-            saved.filter(
-                item =>
-                    item !== id
-            );
-
-        showToast(
-            "Removed from saved"
-        );
-
-    }
-
-
-    localStorage.setItem(
-        key,
-        JSON.stringify(
-            saved
-        )
-    );
-
-}
-
-
-/* =======================================================
-   SHARE
-======================================================= */
-
-function shareVideo(id) {
-
-    const post =
-        FEED.find(
-            item =>
-                String(item.id) ===
-                String(id)
-        );
-
-
-    if (!post)
-        return;
-
-
-    const url =
-        post.redditUrl ||
-        post.permalink ||
-        window.location.href;
-
-
-    if (
-        navigator.share
-    ) {
-
-        navigator.share({
-
-            title:
-                post.title ||
-                "Video",
-
-            url
+            observer.observe(card);
 
         });
 
-    }
-
-    else if (
-        navigator.clipboard
-    ) {
-
-        navigator.clipboard
-            .writeText(url);
-
-        showToast(
-            "Link copied"
-        );
-
-    }
-
 }
 
 
-/* =======================================================
-   SETTINGS
-======================================================= */
+/* ============================================================
+   INFINITE FEED
+   ============================================================ */
 
-function openSettings() {
+feed.addEventListener(
+    "scroll",
+    async () => {
 
-    updatePreferences();
-
-    document
-        .getElementById(
-            "settingsPanel"
-        )
-        .classList.add(
-            "open"
-        );
-
-}
+        const distanceFromBottom =
+            feed.scrollHeight -
+            feed.scrollTop -
+            feed.clientHeight;
 
 
-function closeSettings() {
+        /*
+           When we're close to the bottom,
+           automatically grab more.
+        */
 
-    document
-        .getElementById(
-            "settingsPanel"
-        )
-        .classList.remove(
-            "open"
-        );
+        if (
+            distanceFromBottom <
+            feed.clientHeight *
+            CONFIG.LOAD_MORE_WHEN_REMAINING
+        ) {
 
-}
+            await fetchVideos();
 
+            setupObserver();
 
-/* =======================================================
-   PREFERENCES
-======================================================= */
-
-function togglePreference(
-    button
-) {
-
-    const category =
-        button.dataset.category;
-
-
-    const index =
-        USER.preferences.indexOf(
-            category
-        );
-
-
-    if (index === -1) {
-
-        USER.preferences.push(
-            category
-        );
+        }
 
     }
+);
 
-    else {
 
-        USER.preferences.splice(
-            index,
-            1
-        );
+/* ============================================================
+   RANDOMIZE ARRAY
+   ============================================================ */
 
-    }
-
-
-    saveUser();
-
-    updatePreferences();
-
-}
-
-
-function updatePreferences() {
-
-    document
-        .querySelectorAll(
-            ".preference"
-        )
-        .forEach(
-            button => {
-
-                button.classList.toggle(
-
-                    "selected",
-
-                    USER.preferences
-                        .includes(
-                            button.dataset
-                                .category
-                        )
-
-                );
-
-            }
-        );
-
-}
-
-
-/* =======================================================
-   REFRESH
-======================================================= */
-
-function refreshFeed() {
-
-    closeSettings();
-
-    loadFeed();
-
-}
-
-
-/* =======================================================
-   SHUFFLE
-======================================================= */
-
-function shuffleFeed() {
-
-    CURRENT_FEED =
-        shuffle(
-            [...CURRENT_FEED]
-        );
-
-    renderFeed();
-
-    showToast(
-        "Feed shuffled 🎲"
-    );
-
-}
-
-
-/* =======================================================
-   UI HELPERS
-======================================================= */
-
-function showLoading() {
-
-    feedElement.innerHTML = `
-
-        <div class="loading">
-
-            <div class="spinner"></div>
-
-            <div>
-                Loading videos...
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-function showMessage(
-    title,
-    text,
-    retry = false
-) {
-
-    feedElement.innerHTML = `
-
-        <div class="message">
-
-            <div class="message-box">
-
-                <h2>
-                    ${escapeHTML(title)}
-                </h2>
-
-                <p>
-                    ${escapeHTML(text)}
-                </p>
-
-                ${
-                    retry
-                    ?
-                    `
-                    <button
-                        class="retry"
-                        onclick="loadFeed()"
-                    >
-                        Try again
-                    </button>
-                    `
-                    :
-                    ""
-                }
-
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-function showToast(
-    message
-) {
-
-    const toast =
-        document.getElementById(
-            "toast"
-        );
-
-
-    toast.textContent =
-        message;
-
-
-    toast.classList.add(
-        "show"
-    );
-
-
-    clearTimeout(
-        toastTimer
-    );
-
-
-    toastTimer =
-        setTimeout(
-            () => {
-
-                toast.classList.remove(
-                    "show"
-                );
-
-            },
-            1800
-        );
-
-}
-
-
-/* =======================================================
-   UTILITIES
-======================================================= */
-
-function shuffle(
-    array
-) {
+function shuffle(array) {
 
     for (
         let i = array.length - 1;
@@ -2313,8 +1155,7 @@ function shuffle(
 
         const j =
             Math.floor(
-                Math.random() *
-                (i + 1)
+                Math.random() * (i + 1)
             );
 
 
@@ -2335,435 +1176,123 @@ function shuffle(
 }
 
 
-function isVideoUrl(
-    url
-) {
+/* ============================================================
+   CLEAN WIKIMEDIA TITLE
+   ============================================================ */
 
-    return /\.(mp4|webm|mov|m4v)(\?.*)?$/i
-        .test(
-            url
-        );
+function cleanTitle(title) {
 
-}
-
-
-function formatNumber(
-    number
-) {
-
-    number =
-        Number(number) || 0;
-
-
-    if (
-        number >= 1000000
-    ) {
-
-        return (
-            number /
-            1000000
-        )
-        .toFixed(1)
-        .replace(
-            ".0",
-            ""
-        ) + "M";
-
-    }
-
-
-    if (
-        number >= 1000
-    ) {
-
-        return (
-            number /
-            1000
-        )
-        .toFixed(1)
-        .replace(
-            ".0",
-            ""
-        ) + "K";
-
-    }
-
-
-    return String(
-        number
-    );
+    return String(title || "")
+        .replace(/^File:/, "")
+        .replace(/\.[^/.]+$/, "")
+        .replaceAll("_", " ");
 
 }
 
 
-/*
-Prevent HTML injection from Reddit titles,
-authors, etc.
-*/
+/* ============================================================
+   HTML ESCAPING
+   ============================================================ */
 
-function escapeHTML(
-    value
-) {
+function escapeHTML(value) {
 
     return String(value)
-        .replace(
-            /&/g,
+
+        .replaceAll(
+            "&",
             "&amp;"
         )
-        .replace(
-            /</g,
+
+        .replaceAll(
+            "<",
             "&lt;"
         )
-        .replace(
-            />/g,
+
+        .replaceAll(
+            ">",
             "&gt;"
         )
-        .replace(
-            /"/g,
+
+        .replaceAll(
+            '"',
             "&quot;"
         )
-        .replace(
-            /'/g,
+
+        .replaceAll(
+            "'",
             "&#039;"
         );
 
 }
 
 
-function escapeAttribute(
-    value
-) {
+/* ============================================================
+   ERROR DISPLAY
+   ============================================================ */
 
-    return escapeHTML(
-        value
-    );
+function showError() {
 
-}
-
-
-/* =======================================================
-   SAVE USER
-======================================================= */
-
-function saveUser() {
-
-    localStorage.setItem(
-
-        "afterdark_preferences",
-
-        JSON.stringify(
-            USER.preferences
-        )
-
-    );
-
-
-    localStorage.setItem(
-
-        "afterdark_likes",
-
-        JSON.stringify(
-            USER.liked
-        )
-
-    );
-
-
-    localStorage.setItem(
-
-        "afterdark_watched",
-
-        JSON.stringify(
-            USER.watched
-        )
-
-    );
-
-
-    localStorage.setItem(
-
-        "afterdark_category_scores",
-
-        JSON.stringify(
-            USER.categoryScores
-        )
-
-    );
-
-}
-
-
-/* =======================================================
-   START
-======================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        checkAgeGate();
-
+    if (feed.children.length > 0) {
+        return;
     }
-);
+
+
+    feed.innerHTML = `
+
+        <div style="
+            height:100%;
+            display:grid;
+            place-items:center;
+            text-align:center;
+            padding:30px;
+        ">
+
+            <div>
+
+                <h2>
+                    Couldn't load videos
+                </h2>
+
+                <p style="
+                    color:#aaa;
+                    margin-top:10px;
+                ">
+                    Try refreshing ScrollFeed.
+                </p>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ============================================================
+   START
+   ============================================================ */
+
+async function start() {
+
+    await fetchVideos();
+
+    setupObserver();
+
+    loading.classList.add(
+        "hidden"
+    );
+
+}
+
+
+/* ============================================================
+   GO
+   ============================================================ */
+
+start();
 
 </script>
-
-
-<!-- =======================================================
-     AGE GATE
-======================================================= -->
-
-<section
-    class="age-gate"
-    id="ageGate"
->
-
-    <div class="age-card">
-
-        <div class="age-icon">
-            🔞
-        </div>
-
-        <h1>
-            Welcome
-        </h1>
-
-        <p>
-            This platform is intended for adults
-            18 years of age or older.
-        </p>
-
-        <button
-            class="enter-button"
-            onclick="enterSite()"
-        >
-            I am 18+ — Enter
-        </button>
-
-        <button
-            class="exit-button"
-            onclick="exitSite()"
-        >
-            Exit
-        </button>
-
-        <div class="age-note">
-            Content sources are controlled by the
-            server configuration.
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =======================================================
-     APPLICATION
-======================================================= -->
-
-<div
-    id="app"
-    style="display:none;"
->
-
-    <header class="topbar">
-
-        <div class="logo">
-            After<span>Dark</span>
-        </div>
-
-
-        <div class="top-buttons">
-
-            <button
-                class="top-button"
-                onclick="openSettings()"
-            >
-                ⚙ Settings
-            </button>
-
-            <button
-                class="top-button"
-                onclick="refreshFeed()"
-            >
-                ↻
-            </button>
-
-            <button
-                class="top-button"
-                onclick="shuffleFeed()"
-            >
-                🎲
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <main
-        class="feed"
-        id="feed"
-    ></main>
-
-</div>
-
-
-<!-- =======================================================
-     SETTINGS
-======================================================= -->
-
-<div
-    class="panel"
-    id="settingsPanel"
->
-
-    <div class="panel-card">
-
-        <h2>
-            Feed Settings
-        </h2>
-
-        <p>
-            These preferences affect the local
-            recommendation system.
-        </p>
-
-
-        <div class="setting">
-
-            <strong>
-                Configured subreddits
-            </strong>
-
-            <small>
-                ${APP_CONFIG.SUBREDDITS
-                    .map(
-                        subreddit =>
-                            "r/" + subreddit
-                    )
-                    .join(", ")}
-            </small>
-
-        </div>
-
-
-        <div class="setting">
-
-            <strong>
-                Content mode
-            </strong>
-
-            <small>
-                NSFW_ENABLED =
-                ${APP_CONFIG.NSFW_ENABLED}
-            </small>
-
-        </div>
-
-
-        <div class="setting">
-
-            <strong>
-                Reddit sort
-            </strong>
-
-            <small>
-                ${APP_CONFIG.SORT}
-            </small>
-
-        </div>
-
-
-        <div class="setting">
-
-            <strong>
-                Video-only mode
-            </strong>
-
-            <small>
-                VIDEOS_ONLY =
-                ${APP_CONFIG.VIDEOS_ONLY}
-            </small>
-
-        </div>
-
-
-        <h3>
-            Your interests
-        </h3>
-
-
-        <div class="preference-grid">
-
-            <button
-                class="preference"
-                data-category="straight"
-                onclick="togglePreference(this)"
-            >
-                Straight
-            </button>
-
-
-            <button
-                class="preference"
-                data-category="gay"
-                onclick="togglePreference(this)"
-            >
-                Gay
-            </button>
-
-
-            <button
-                class="preference"
-                data-category="couples"
-                onclick="togglePreference(this)"
-            >
-                Couples
-            </button>
-
-
-            <button
-                class="preference"
-                data-category="creator"
-                onclick="togglePreference(this)"
-            >
-                Creator
-            </button>
-
-
-            <button
-                class="preference"
-                data-category="general"
-                onclick="togglePreference(this)"
-            >
-                General
-            </button>
-
-        </div>
-
-
-        <button
-            class="close-panel"
-            onclick="closeSettings()"
-        >
-            Done
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =======================================================
-     TOAST
-======================================================= -->
-
-<div
-    class="toast"
-    id="toast"
-></div>
-
 
 </body>
 </html>
