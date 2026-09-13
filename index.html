@@ -1,1299 +1,214 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ScrollFeed</title>
-
+<title>PictureWorld — real moments, not posed ones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  :root{
+    --bg: #0f0f0f;
+    --bg-panel: #181818;
+    --paper: #1c1c1c;
+    --cream: #ededed;
+    --honey: #ff9000;
+    --honey-dim: #cc7300;
+    --brick: #ff9000;
+    --line: rgba(255,255,255,0.09);
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 460px at 15% -8%, rgba(255,144,0,0.16), transparent 60%),
+      radial-gradient(ellipse 700px 460px at 100% 5%, rgba(255,144,0,0.08), transparent 55%);
+    color:var(--cream);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--honey); color:#0f0f0f; }
+  a{ color:inherit; }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    max-width:1180px; margin:0 auto; padding:28px 28px 0;
+    border-bottom:1px solid var(--line);
+    padding-bottom:20px;
+  }
+  .wordmark{ font-family:'Oswald', sans-serif; font-size:24px; font-weight:600; letter-spacing:0.3px; text-transform:uppercase; }
+  .wordmark em{ font-style:normal; color:var(--honey); font-weight:700; }
+
+  .hero{ max-width:1180px; margin:0 auto; padding:56px 28px 30px; }
+  .hero h1{
+    font-family:'Oswald', sans-serif; font-weight:600; text-transform:uppercase;
+    font-size:clamp(32px, 4.6vw, 52px); line-height:1.08; letter-spacing:0.3px;
+    margin:0 0 16px; max-width:16ch;
+  }
+  .hero h1 i{ font-style:normal; font-weight:700; color:var(--honey); }
+  .hero p{ font-size:16.5px; line-height:1.6; max-width:50ch; opacity:0.75; margin:0; }
+
+  .gallery-section{ max-width:1180px; margin:0 auto; padding:20px 28px 100px; }
+  .gallery-heading{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:26px; border-bottom:1px solid var(--line); padding-bottom:14px;
+  }
+  .gallery-heading h2{ font-family:'Oswald', sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:0.4px; font-size:22px; margin:0; }
+  .gallery-count{ font-size:14px; opacity:0.55; }
+
+  .empty-state{ text-align:center; padding:70px 20px; opacity:0.55; font-size:15px; }
+  .empty-state span{ display:block; font-family:'Oswald', sans-serif; text-transform:uppercase; font-size:20px; color:var(--honey); opacity:1; margin-bottom:8px; }
+
+  .wall{ column-count:4; column-gap:26px; }
+  @media (max-width:1000px){ .wall{ column-count:3; } }
+  @media (max-width:720px){ .wall{ column-count:2; } }
+  @media (max-width:480px){ .wall{ column-count:1; } }
+
+  .frame{
+    break-inside:avoid; margin-bottom:26px; background:var(--paper);
+    padding:0 0 40px; border-radius:4px; overflow:hidden;
+    box-shadow:0 10px 22px rgba(0,0,0,0.5);
+    border:1px solid var(--line);
+    position:relative; cursor:zoom-in;
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .frame:hover{ transform:translateY(-4px); box-shadow:0 16px 32px rgba(255,144,0,0.14); border-color:var(--honey); }
+  .frame img{ display:block; width:100%; background:rgba(255,255,255,0.03); min-height:60px; }
+  .frame .cap{
+    position:absolute; left:14px; right:14px; bottom:13px;
+    font-family:'Work Sans', sans-serif; font-weight:500; font-size:13px;
+    color:var(--cream); opacity:0.8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .frame::after{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:40px;
+    background:linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+    pointer-events:none;
+  }
+
+  .lightbox{
+    position:fixed; inset:0; background:rgba(15,11,7,0.92);
+    display:none; align-items:center; justify-content:center; z-index:100; padding:40px;
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox img{ max-width:90vw; max-height:82vh; border-radius:3px; box-shadow:0 30px 60px rgba(0,0,0,0.5); }
+  .lightbox .close, .lightbox .nav{
+    position:absolute; background:rgba(244,234,217,0.08); border:1px solid var(--line);
+    color:var(--cream); border-radius:50%; cursor:pointer; transition:background .2s ease;
+  }
+  .lightbox .close:hover, .lightbox .nav:hover{ background:rgba(244,234,217,0.18); }
+  .lightbox .close{ top:24px; right:28px; width:42px; height:42px; font-size:18px; }
+  .lightbox .nav{ top:50%; transform:translateY(-50%); width:48px; height:48px; font-size:20px; }
+  .lightbox .prev{ left:24px; }
+  .lightbox .next{ right:24px; }
+  .lightbox .lb-cap{
+    position:absolute; bottom:26px; left:0; right:0; text-align:center;
+    font-family:'Work Sans', sans-serif; font-weight:500; font-size:15px; color:var(--cream); opacity:0.75;
+  }
+
+  footer{ text-align:center; padding:36px 20px 50px; font-size:13px; opacity:0.4; }
 
-    /* =========================================================
-       EASY EDIT SETTINGS
-       ========================================================= */
-
-    :root {
-        --background: #000;
-        --text: #fff;
-        --accent: #ff0050;
-        --secondary: #00f2ea;
-    }
-
-
-    /* =========================================================
-       RESET
-       ========================================================= */
-
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    html,
-    body {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: var(--background);
-        color: var(--text);
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-
-    /* =========================================================
-       APP
-       ========================================================= */
-
-    #app {
-        width: 100%;
-        height: 100dvh;
-        background: #000;
-        position: relative;
-    }
-
-
-    /* =========================================================
-       FEED
-       ========================================================= */
-
-    #feed {
-        width: 100%;
-        height: 100dvh;
-
-        overflow-y: auto;
-
-        scroll-snap-type: y mandatory;
-
-        scrollbar-width: none;
-    }
-
-    #feed::-webkit-scrollbar {
-        display: none;
-    }
-
-
-    /* =========================================================
-       VIDEO
-       ========================================================= */
-
-    .video-card {
-        width: 100%;
-        height: 100dvh;
-
-        position: relative;
-
-        scroll-snap-align: start;
-
-        background: #111;
-
-        overflow: hidden;
-    }
-
-    .video {
-        width: 100%;
-        height: 100%;
-
-        object-fit: cover;
-
-        background: #111;
-
-        cursor: pointer;
-    }
-
-
-    /* =========================================================
-       DARK GRADIENT
-       ========================================================= */
-
-    .video-card::after {
-        content: "";
-
-        position: absolute;
-
-        left: 0;
-        right: 0;
-        bottom: 0;
-
-        height: 50%;
-
-        pointer-events: none;
-
-        background:
-            linear-gradient(
-                transparent,
-                rgba(0,0,0,.85)
-            );
-    }
-
-
-    /* =========================================================
-       TOP BAR
-       ========================================================= */
-
-    .topbar {
-        position: fixed;
-
-        z-index: 100;
-
-        top: 0;
-        left: 0;
-        right: 0;
-
-        height: 70px;
-
-        display: flex;
-
-        justify-content: center;
-        align-items: center;
-
-        pointer-events: none;
-
-        background:
-            linear-gradient(
-                rgba(0,0,0,.55),
-                transparent
-            );
-    }
-
-    .logo {
-        font-size: 25px;
-
-        font-weight: 900;
-
-        letter-spacing: -1px;
-
-        text-shadow:
-            2px 2px var(--accent),
-            -2px -2px var(--secondary);
-    }
-
-
-    /* =========================================================
-       VIDEO INFORMATION
-       ========================================================= */
-
-    .info {
-        position: absolute;
-
-        z-index: 20;
-
-        left: 18px;
-        right: 90px;
-        bottom: 30px;
-    }
-
-    .username {
-        font-weight: 800;
-
-        font-size: 17px;
-
-        margin-bottom: 8px;
-    }
-
-    .description {
-        font-size: 15px;
-
-        line-height: 1.4;
-
-        margin-bottom: 10px;
-    }
-
-    .source {
-        font-size: 12px;
-
-        color: #bbb;
-    }
-
-
-    /* =========================================================
-       ACTION BUTTONS
-       ========================================================= */
-
-    .actions {
-        position: absolute;
-
-        z-index: 30;
-
-        right: 12px;
-        bottom: 30px;
-
-        display: flex;
-
-        flex-direction: column;
-
-        align-items: center;
-
-        gap: 18px;
-    }
-
-    button {
-        font-family: inherit;
-    }
-
-    .action {
-        border: 0;
-
-        background: transparent;
-
-        color: white;
-
-        cursor: pointer;
-
-        display: flex;
-
-        flex-direction: column;
-
-        align-items: center;
-
-        font-size: 12px;
-
-        font-weight: bold;
-    }
-
-    .action-icon {
-        width: 50px;
-        height: 50px;
-
-        display: grid;
-
-        place-items: center;
-
-        border-radius: 50%;
-
-        background: rgba(255,255,255,.13);
-
-        backdrop-filter: blur(10px);
-
-        font-size: 22px;
-
-        margin-bottom: 4px;
-    }
-
-    .liked .action-icon {
-        color: var(--accent);
-    }
-
-
-    /* =========================================================
-       PLAY ICON
-       ========================================================= */
-
-    .play {
-        position: absolute;
-
-        z-index: 15;
-
-        inset: 0;
-
-        display: grid;
-
-        place-items: center;
-
-        pointer-events: none;
-
-        opacity: 0;
-
-        transition: opacity .2s;
-    }
-
-    .play.show {
-        opacity: 1;
-    }
-
-    .play span {
-        width: 75px;
-        height: 75px;
-
-        border-radius: 50%;
-
-        display: grid;
-
-        place-items: center;
-
-        background: rgba(0,0,0,.6);
-
-        font-size: 32px;
-    }
-
-
-    /* =========================================================
-       LOADING
-       ========================================================= */
-
-    #loading {
-        position: fixed;
-
-        z-index: 500;
-
-        inset: 0;
-
-        background: #000;
-
-        display: grid;
-
-        place-items: center;
-    }
-
-    #loading.hidden {
-        display: none;
-    }
-
-    .spinner {
-        width: 45px;
-        height: 45px;
-
-        border: 4px solid #333;
-
-        border-top-color: var(--accent);
-
-        border-radius: 50%;
-
-        animation: spin .8s linear infinite;
-    }
-
-    @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-
-    /* =========================================================
-       LOAD MORE
-       ========================================================= */
-
-    #loadingMore {
-        position: fixed;
-
-        z-index: 400;
-
-        bottom: 20px;
-
-        left: 50%;
-
-        transform: translateX(-50%);
-
-        background: rgba(0,0,0,.65);
-
-        padding: 8px 14px;
-
-        border-radius: 20px;
-
-        font-size: 12px;
-
-        display: none;
-    }
-
-
-    /* =========================================================
-       DESKTOP
-       ========================================================= */
-
-    @media (min-width: 700px) {
-
-        #feed {
-            width: 500px;
-
-            margin: auto;
-
-            box-shadow:
-                0 0 80px rgba(0,0,0,.8);
-        }
-
-        .topbar {
-            width: 500px;
-
-            left: 50%;
-
-            right: auto;
-
-            transform: translateX(-50%);
-        }
-    }
-
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
 </style>
 </head>
-
-
 <body>
 
-<div id="app">
+  <div class="topbar">
+    <div class="wordmark">Picture<em>World</em></div>
+  </div>
 
-    <div id="loading">
-        <div class="spinner"></div>
+  <section class="hero">
+    <h1>Real moments, caught <i>mid-laugh.</i></h1>
+    <p>PictureWorld is a wall for the pictures that weren't posed — the blurry ones, the ones where someone's mid-sentence, the ones that make you feel like you were there.</p>
+  </section>
+
+  <section class="gallery-section">
+    <div class="gallery-heading">
+      <h2>The wall</h2>
+      <div class="gallery-count" id="galleryCount">0 pictures</div>
     </div>
+    <div class="empty-state" id="emptyState" style="display:none;"><span>Nothing here yet</span>add a photo down in the code</div>
+    <div class="wall" id="wall-grid"></div>
+  </section>
 
-    <header class="topbar">
-        <div class="logo">
-            ScrollFeed
-        </div>
-    </header>
+  <footer>PictureWorld — made for the moments no one poses for.</footer>
 
-    <main id="feed"></main>
-
-    <div id="loadingMore">
-        Loading more videos...
-    </div>
-
-</div>
-
+  <div class="lightbox" id="lightbox">
+    <button class="close" id="lbClose">✕</button>
+    <button class="nav prev" id="lbPrev">‹</button>
+    <img id="lbImg" src="" alt="">
+    <button class="nav next" id="lbNext">›</button>
+    <div class="lb-cap" id="lbCap"></div>
+  </div>
 
 <script>
-
-/* ============================================================
-   SCROLLFEED CONFIGURATION
-   ============================================================ */
-
-const CONFIG = {
-
-    /*
-       What Wikimedia Commons searches for.
-
-       You can change these to things like:
-
-       "cats"
-       "dogs"
-       "sports"
-       "nature"
-       "cars"
-       "space"
-       "ocean"
-       "funny"
-       "animation"
-
-       The application randomly chooses one.
-    */
-
-    SEARCHES: [
-        "doggystyle",
-        "porn",
-        "sex",
-        "fucking",
-        "girlsnude",
-        "nakedgirls",
-        "hotgirls",
-        "girlsass",
-        "girlsbutt"
-    ],
-
-
-    /*
-       Number of videos fetched at once.
-    */
-
-    VIDEOS_PER_REQUEST: 20,
-
-
-    /*
-       Automatically load more when this many
-       videos remain.
-    */
-
-    LOAD_MORE_WHEN_REMAINING: 5,
-
-
-    /*
-       Videos start muted because browsers normally
-       block autoplay with sound.
-    */
-
-    MUTED: true,
-
-
-    /*
-       Automatically play the visible video.
-    */
-
-    AUTOPLAY: true
-
-};
-
-
-/* ============================================================
-   DOM
-   ============================================================ */
-
-const feed = document.getElementById("feed");
-
-const loading = document.getElementById("loading");
-
-const loadingMore =
-    document.getElementById("loadingMore");
-
-
-/* ============================================================
-   STATE
-   ============================================================ */
-
-let loadingVideos = false;
-
-let loadedFiles = new Set();
-
-let observer;
-
-
-/* ============================================================
-   RANDOM SEARCH
-   ============================================================ */
-
-function randomSearch() {
-
-    const list = CONFIG.SEARCHES;
-
-    return list[
-        Math.floor(
-            Math.random() * list.length
-        )
-    ];
-}
-
-
-/* ============================================================
-   FETCH RANDOM VIDEOS FROM WIKIMEDIA COMMONS
-   ============================================================ */
-
-async function fetchVideos() {
-
-    if (loadingVideos) return;
-
-    loadingVideos = true;
-
-    loadingMore.style.display = "block";
-
-
-    try {
-
-        const search = randomSearch();
-
-
-        /*
-           Wikimedia Commons API.
-
-           "origin=*" allows browser-side CORS requests.
-        */
-
-        const url =
-            "https://commons.wikimedia.org/w/api.php" +
-
-            "?action=query" +
-
-            "&generator=search" +
-
-            "&gsrsearch=" +
-            encodeURIComponent(
-                search + " filetype:video"
-            ) +
-
-            "&gsrnamespace=6" +
-
-            "&gsrlimit=" +
-            CONFIG.VIDEOS_PER_REQUEST +
-
-            "&prop=imageinfo" +
-
-            "&iiprop=url|mime|size" +
-
-            "&iiurlwidth=720" +
-
-            "&format=json" +
-
-            "&origin=*";
-
-
-        const response =
-            await fetch(url);
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Wikimedia request failed"
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        const pages =
-            Object.values(
-                data.query?.pages || {}
-            );
-
-
-        /*
-           Shuffle results so the feed doesn't
-           always appear in the same order.
-        */
-
-        shuffle(pages);
-
-
-        let added = 0;
-
-
-        for (const page of pages) {
-
-            const info =
-                page.imageinfo?.[0];
-
-
-            if (!info) continue;
-
-
-            const mime =
-                info.mime || "";
-
-
-            /*
-               Only allow actual video formats.
-
-               This is important because Wikimedia
-               search can return images as well.
-            */
-
-            if (!mime.startsWith("video/")) {
-                continue;
-            }
-
-
-            const videoURL =
-                info.url;
-
-
-            if (!videoURL) continue;
-
-
-            /*
-               Don't show the same file twice.
-            */
-
-            if (loadedFiles.has(videoURL)) {
-                continue;
-            }
-
-
-            loadedFiles.add(videoURL);
-
-
-            const card =
-                createVideoCard({
-
-                    url: videoURL,
-
-                    title:
-                        cleanTitle(
-                            page.title
-                        ),
-
-                    source:
-                        "Wikimedia Commons",
-
-                    pageURL:
-                        "https://commons.wikimedia.org/wiki/" +
-                        encodeURIComponent(
-                            page.title.replace(
-                                "File:",
-                                "File:"
-                            )
-                        )
-
-                });
-
-
-            feed.appendChild(card);
-
-
-            added++;
-
-        }
-
-
-        /*
-           If this particular search didn't
-           produce usable videos, try again.
-        */
-
-        if (added === 0) {
-
-            console.log(
-                "No usable videos. Trying another search..."
-            );
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Could not load videos:",
-            error
-        );
-
-        showError();
-
-    }
-
-
-    loadingVideos = false;
-
-    loadingMore.style.display = "none";
-
-}
-
-
-/* ============================================================
-   CREATE VIDEO CARD
-   ============================================================ */
-
-function createVideoCard(data) {
-
-    const card =
-        document.createElement("article");
-
-
-    card.className =
-        "video-card";
-
-
-    card.innerHTML = `
-
-        <video
-            class="video"
-            src="${escapeHTML(data.url)}"
-            playsinline
-            preload="metadata"
-            ${CONFIG.MUTED ? "muted" : ""}
-        ></video>
-
-
-        <div class="play">
-
-            <span>▶</span>
-
-        </div>
-
-
-        <div class="info">
-
-            <div class="username">
-                ScrollFeed
-            </div>
-
-            <div class="description">
-                ${escapeHTML(data.title)}
-            </div>
-
-            <div class="source">
-                🎬 ${escapeHTML(data.source)}
-            </div>
-
-        </div>
-
-
-        <div class="actions">
-
-            <button
-                class="action like"
-                title="Like"
-            >
-
-                <div class="action-icon">
-                    ♡
-                </div>
-
-                <span>Like</span>
-
-            </button>
-
-
-            <button
-                class="action share"
-                title="Share"
-            >
-
-                <div class="action-icon">
-                    ↗
-                </div>
-
-                <span>Share</span>
-
-            </button>
-
-
-            <button
-                class="action mute"
-                title="Sound"
-            >
-
-                <div class="action-icon">
-                    🔇
-                </div>
-
-                <span>Sound</span>
-
-            </button>
-
-
-            <button
-                class="action source-button"
-                title="Open source"
-            >
-
-                <div class="action-icon">
-                    ℹ
-                </div>
-
-                <span>Source</span>
-
-            </button>
-
-        </div>
-
-    `;
-
-
-    setupCard(card, data);
-
-
-    return card;
-
-}
-
-
-/* ============================================================
-   VIDEO CONTROLS
-   ============================================================ */
-
-function setupCard(card, data) {
-
-    const video =
-        card.querySelector(".video");
-
-
-    const play =
-        card.querySelector(".play");
-
-
-    const like =
-        card.querySelector(".like");
-
-
-    const share =
-        card.querySelector(".share");
-
-
-    const mute =
-        card.querySelector(".mute");
-
-
-    const source =
-        card.querySelector(".source-button");
-
-
-    /* ---------------------------------------------------------
-       PLAY / PAUSE
-       --------------------------------------------------------- */
-
-    video.addEventListener(
-        "click",
-        () => {
-
-            if (video.paused) {
-
-                video.play();
-
-                play.classList.remove("show");
-
-            } else {
-
-                video.pause();
-
-                play.classList.add("show");
-
-            }
-
-        }
-    );
-
-
-    /* ---------------------------------------------------------
-       LIKE
-       --------------------------------------------------------- */
-
-    like.addEventListener(
-        "click",
-        () => {
-
-            like.classList.toggle("liked");
-
-
-            like.querySelector(
-                ".action-icon"
-            ).textContent =
-                like.classList.contains("liked")
-                    ? "♥"
-                    : "♡";
-
-        }
-    );
-
-
-    /* ---------------------------------------------------------
-       MUTE
-       --------------------------------------------------------- */
-
-    mute.addEventListener(
-        "click",
-        () => {
-
-            video.muted =
-                !video.muted;
-
-
-            mute.querySelector(
-                ".action-icon"
-            ).textContent =
-                video.muted
-                    ? "🔇"
-                    : "🔊";
-
-        }
-    );
-
-
-    /* ---------------------------------------------------------
-       SHARE
-       --------------------------------------------------------- */
-
-    share.addEventListener(
-        "click",
-        async () => {
-
-            try {
-
-                if (navigator.share) {
-
-                    await navigator.share({
-
-                        title:
-                            "ScrollFeed",
-
-                        text:
-                            data.title,
-
-                        url:
-                            data.pageURL
-
-                    });
-
-                } else {
-
-                    await navigator.clipboard.writeText(
-                        data.pageURL
-                    );
-
-                    alert(
-                        "Source URL copied!"
-                    );
-
-                }
-
-            } catch {
-
-                console.log(
-                    "Share cancelled."
-                );
-
-            }
-
-        }
-    );
-
-
-    /* ---------------------------------------------------------
-       SOURCE
-       --------------------------------------------------------- */
-
-    source.addEventListener(
-        "click",
-        () => {
-
-            window.open(
-                data.pageURL,
-                "_blank",
-                "noopener"
-            );
-
-        }
-    );
-
-}
-
-
-/* ============================================================
-   AUTOPLAY OBSERVER
-   ============================================================ */
-
-function setupObserver() {
-
-    if (observer) {
-
-        observer.disconnect();
-
-    }
-
-
-    observer =
-        new IntersectionObserver(
-            entries => {
-
-                entries.forEach(
-                    entry => {
-
-                        const video =
-                            entry.target.querySelector(
-                                ".video"
-                            );
-
-
-                        if (!video) return;
-
-
-                        if (
-                            entry.isIntersecting
-                        ) {
-
-                            if (
-                                CONFIG.AUTOPLAY
-                            ) {
-
-                                video
-                                    .play()
-                                    .catch(
-                                        () => {}
-                                    );
-
-                            }
-
-                        } else {
-
-                            video.pause();
-
-                        }
-
-                    }
-                );
-
-            },
-            {
-                threshold: 0.7
-            }
-        );
-
-
-    document
-        .querySelectorAll(".video-card")
-        .forEach(card => {
-
-            observer.observe(card);
-
-        });
-
-}
-
-
-/* ============================================================
-   INFINITE FEED
-   ============================================================ */
-
-feed.addEventListener(
-    "scroll",
-    async () => {
-
-        const distanceFromBottom =
-            feed.scrollHeight -
-            feed.scrollTop -
-            feed.clientHeight;
-
-
-        /*
-           When we're close to the bottom,
-           automatically grab more.
-        */
-
-        if (
-            distanceFromBottom <
-            feed.clientHeight *
-            CONFIG.LOAD_MORE_WHEN_REMAINING
-        ) {
-
-            await fetchVideos();
-
-            setupObserver();
-
-        }
-
-    }
-);
-
-
-/* ============================================================
-   RANDOMIZE ARRAY
-   ============================================================ */
-
-function shuffle(array) {
-
-    for (
-        let i = array.length - 1;
-        i > 0;
-        i--
-    ) {
-
-        const j =
-            Math.floor(
-                Math.random() * (i + 1)
-            );
-
-
-        [
-            array[i],
-            array[j]
-        ] =
-        [
-            array[j],
-            array[i]
-        ];
-
-    }
-
-
-    return array;
-
-}
-
-
-/* ============================================================
-   CLEAN WIKIMEDIA TITLE
-   ============================================================ */
-
-function cleanTitle(title) {
-
-    return String(title || "")
-        .replace(/^File:/, "")
-        .replace(/\.[^/.]+$/, "")
-        .replaceAll("_", " ");
-
-}
-
-
-/* ============================================================
-   HTML ESCAPING
-   ============================================================ */
-
-function escapeHTML(value) {
-
-    return String(value)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
-
-}
-
-
-/* ============================================================
-   ERROR DISPLAY
-   ============================================================ */
-
-function showError() {
-
-    if (feed.children.length > 0) {
-        return;
-    }
-
-
-    feed.innerHTML = `
-
-        <div style="
-            height:100%;
-            display:grid;
-            place-items:center;
-            text-align:center;
-            padding:30px;
-        ">
-
-            <div>
-
-                <h2>
-                    Couldn't load videos
-                </h2>
-
-                <p style="
-                    color:#aaa;
-                    margin-top:10px;
-                ">
-                    Try refreshing ScrollFeed.
-                </p>
-
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* ============================================================
-   START
-   ============================================================ */
-
-async function start() {
-
-    await fetchVideos();
-
-    setupObserver();
-
-    loading.classList.add(
-        "hidden"
-    );
-
-}
-
-
-/* ============================================================
-   GO
-   ============================================================ */
-
-start();
-
+  /* ========================================================
+     ADD YOUR PHOTOS HERE
+     One line per photo: { url: "...", caption: "..." }
+     Get the url from Discord: right-click the image in your
+     server → "Copy Image Address" → paste it as the url below.
+     Newest photo at the top shows up first on the wall.
+     Don't forget the comma at the end of each line except the last.
+  ======================================================== */
+  const PHOTOS = [
+    { url: "https://media.discordapp.net/attachments/xxxxxxx/xxxxxxx/photo1.jpg", caption: "beach day" },
+    { url: "https://media.discordapp.net/attachments/xxxxxxx/xxxxxxx/photo2.jpg", caption: "the good kind of tired" },
+    { url: "https://media.discordapp.net/attachments/xxxxxxx/xxxxxxx/photo3.jpg", caption: "unplanned and perfect" },
+  ];
+  /* ======================================================== */
+
+  const wallGrid = document.getElementById('wall-grid');
+  const emptyState = document.getElementById('emptyState');
+  const galleryCount = document.getElementById('galleryCount');
+
+  function renderWall(){
+    wallGrid.innerHTML = '';
+    PHOTOS.forEach((photo, i) => {
+      const frame = document.createElement('div');
+      frame.className = 'frame';
+
+      const img = document.createElement('img');
+      img.src = photo.url;
+      img.alt = photo.caption || '';
+      img.loading = 'lazy';
+      img.addEventListener('click', () => openLightbox(i));
+
+      const cap = document.createElement('div');
+      cap.className = 'cap';
+      cap.textContent = photo.caption || '';
+
+      frame.appendChild(img);
+      frame.appendChild(cap);
+      wallGrid.appendChild(frame);
+    });
+
+    emptyState.style.display = PHOTOS.length ? 'none' : 'block';
+    galleryCount.textContent = PHOTOS.length + (PHOTOS.length === 1 ? ' picture' : ' pictures');
+  }
+
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbCap = document.getElementById('lbCap');
+  let currentIndex = 0;
+
+  function openLightbox(i){ currentIndex = i; updateLightbox(); lightbox.classList.add('open'); }
+  function updateLightbox(){ lbImg.src = PHOTOS[currentIndex].url; lbCap.textContent = PHOTOS[currentIndex].caption || ''; }
+  function closeLightbox(){ lightbox.classList.remove('open'); }
+
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  document.getElementById('lbNext').addEventListener('click', () => { currentIndex = (currentIndex+1)%PHOTOS.length; updateLightbox(); });
+  document.getElementById('lbPrev').addEventListener('click', () => { currentIndex = (currentIndex-1+PHOTOS.length)%PHOTOS.length; updateLightbox(); });
+  lightbox.addEventListener('click', e => { if(e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => {
+    if(!lightbox.classList.contains('open')) return;
+    if(e.key === 'Escape') closeLightbox();
+    if(e.key === 'ArrowRight') document.getElementById('lbNext').click();
+    if(e.key === 'ArrowLeft') document.getElementById('lbPrev').click();
+  });
+
+  renderWall();
 </script>
-
 </body>
 </html>
-
